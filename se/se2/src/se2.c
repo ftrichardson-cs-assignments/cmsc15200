@@ -34,18 +34,22 @@ double compute_payoff_amount(double initial, double payment, int days_since_loan
     assert(initial > 0);
     assert(payment > 0);
     assert(payment_interval > 0);
-    
-    double days, payoff_amount;
 
-    if (days_since_loan_started <= 0 or days_since_loan_started > initial) {
-      return initial;
+    double payoff_amount;
+    
+    if (days_since_loan_started <= 0 || days_since_loan_started < payment_interval) {
+        return initial;
 
     } else {
-        for (days = initial; days >= (initial - days_since_loan_started); days -= payment_interval) {
-            payoff_amount = days - payment;
+        payoff_amount = initial - ((days_since_loan_started / payment_interval) * payment);
+
+        if (payoff_amount <= 0) {
+            return 0;
+
+        } else {
+            return payoff_amount;
         }
-        return payoff_amount;
-    }
+        }
 }
   
 /*
@@ -62,13 +66,20 @@ double compute_payoff_amount(double initial, double payment, int days_since_loan
  */
 int compute_leonardo(int n)
 {
+    int i, x = 1, y = 1, z;
 
-    // YOUR CODE GOES HERE
-    // REPLACE 0 WITH A SUITABLE RETURN VALUE
+    if (n == 0 || n == 1) {
+        return 1;
 
-    return 0;
+    } else {
+        for (i = 2; i <= n; i++) {
+            z = x + y + 1;
+            x = y;
+            y = z;
+        }
+        return y;
+    }
 }
-
 /*
  * Exercise 3 -- computes the square root of S using the Bakhshali
  * method (as described in the writeup)
@@ -88,10 +99,14 @@ double bakhshali_iterative(double S, double guess)
 {
     assert(S > 0);
 
-    // YOUR CODE GOES HERE
-    // REPLACE 0.0 WITH A SUITABLE RETURN VALUE
+    double r, A;
 
-    return 0.0;
+    while (fabs((S - (guess * guess))) >= EPSILON) {
+        r = (S - (guess * guess)) / (2 * guess);
+        A = r + guess;
+        guess = A - ((r * r) / (2 * A));
+    }
+    return guess;
 }
 
 /*
