@@ -37,60 +37,80 @@ double bet_one_dollar(double init_amount, int num_bets)
     return init_amount;
 }
 
-/* double_bet: computes remaining cash after either doubling bet each
- * round of heads or doubling bet each round of tails (depending on 
- * specified betting strategy)
- *
- * strategy: the betting strategy to use
- * init_amount: the initial amount of cash on hand
- * num_bets: the maximum number of bets to make
- * 
- * Returns: amount of cash remaining
- */
-
-double double_bet(enum betting_strategies strategy, double init_amount,
-                  int num_bets)
+double double_win(double init_amount, int num_bets)
 {
     int n, bet_amount = 1;
 
     for (n = 1; n <= num_bets; n++) {
-        if (flip_coin()) {
-            if (strategy == DOUBLE_ON_WIN) {
+        if (bet_amount > init_amount) {
+            bet_amount = init_amount;
+
+            if (flip_coin()) {
                 init_amount += bet_amount;
                 bet_amount *= 2;
 
             } else {
-                init_amount -= bet_amount;
+                  init_amount -= bet_amount;
 
-                if (init_amount <= 0) {
-                    return 0.00;
-                }
+                  if (init_amount == 0) {
+                      break;
+                  }
             }
+
         } else {
-            if (strategy == DOUBLE_ON_LOSS) {
-                init_amount -= bet_amount;
-                bet_amount *= 2;
+              if (flip_coin()) {
+                  init_amount += bet_amount;
+                  bet_amount *= 2;
 
-                if (init_amount <= 0) {
-                    return 0.00;
-                }
+              } else {
+                    init_amount -= bet_amount;
 
-            } else {
-                init_amount += bet_amount;
-            }
+                    if (init_amount == 0) {
+                        break;
+                    }
+              }
         }
     }
     return init_amount;
 }
 
-/* fibonacci_bet: computes remaining cash after altering bets according to
- * the fibonacci sequence (resetting to $1 for every round of heads)
+double double_loss(double init_amount, int num_bets)
+{
+    int n, bet_amount = 1;
 
- * init_amount: the initial amount of cash on hand
- * num_bets: the maximum number of bets to make
- * 
- * Returns: amount of cash remaining
- */
+    for (n = 1; n <= num_bets; n++) {
+        if (bet_amount > init_amount) {
+            bet_amount = init_amount;
+
+            if (flip_coin()) {
+                init_amount += bet_amount;
+
+            } else {
+                  init_amount -= bet_amount;
+                  bet_amount *= 2;
+
+                  if (init_amount == 0) {
+                      break;
+                  }
+            }
+
+        } else {
+              if (flip_coin()) {
+                  init_amount += bet_amount;
+
+              } else {
+                    init_amount -= bet_amount;
+                    bet_amount *= 2;
+                  
+                    if (init_amount == 0) {
+                        break;
+                    }
+              }
+        }
+    }
+    return init_amount;
+}
+
 
 double fibonacci_bet(double init_amount, int num_bets)
 {
@@ -98,17 +118,39 @@ double fibonacci_bet(double init_amount, int num_bets)
     int x = 0, y = 1;
 
     for (n = 1; n <= num_bets; n++) {
-        if (flip_coin()) {
-            init_amount += bet_amount;
-            bet_amount = 1;
-            x = 0;
-            y = 1;
+        if (bet_amount > init_amount) {
+            bet_amount = init_amount;
+            
+            if (flip_coin()) {
+                init_amount += bet_amount;
+                bet_amount = 1;
+                x = 0;
+                y = 1;
+
+            } else {
+                  init_amount -= bet_amount;
+                  bet_amount = x + y;
+                  x = y;
+                  y = bet_amount;
+            }
 
         } else {
-            init_amount -= bet_amount;
-            bet_amount = x + y;
-            x = y;
-            y = bet_amount;
+            if (flip_coin()) {
+                init_amount += bet_amount;
+                bet_amount = 1;
+                x = 0;
+                y = 1;
+
+            } else {
+                  init_amount -= bet_amount;
+                  bet_amount = x + y;
+                  x = y;
+                  y = bet_amount;
+
+                  if (init_amount == 0){
+                      break;
+                  }  
+            }
         }
     }
     return init_amount;
@@ -130,20 +172,17 @@ double simulate_game(enum betting_strategies strategy, double init_amount,
 
     double remaining_cash;
 
-    if (strategy == ONE_DOLLAR) {
-        remaining_cash = bet_one_dollar(init_amount, num_bets);
+    if (strategy == DOUBLE_ON_WIN) {
+        remaining_cash = double_win(init_amount, num_bets);
 
-    } else if (strategy == DOUBLE_ON_WIN || strategy == DOUBLE_ON_LOSS) {
-          remaining_cash = double_bet(strategy, init_amount, num_bets);
+    } else if (strategy == ONE_DOLLAR) {
+          remaining_cash = bet_one_dollar(init_amount, num_bets);
 
-    } else if (strategy == FIB_STRATEGY) {
-          remaining_cash = fibonacci_bet(init_amount, num_bets);
-
-    } else if (strategy == FLIP_ONLY) {
-          remaining_cash = flip_only(init_amount, num_bets);
+    } else if (strategy == DOUBLE_ON_LOSS) {
+          remaining_cash = double_loss(init_amount, num_bets);
 
     } else {
-          remaining_cash = 11.0;
+          remaining_cash = fibonacci_bet(init_amount, num_bets);
 
     }
     return remaining_cash;
@@ -165,7 +204,12 @@ double simulate_game(enum betting_strategies strategy, double init_amount,
 double simulate_multiple_games(enum betting_strategies strategy, double init_amount,
                                int num_bets, unsigned int init_seed, int num_games)
 {
-    // YOUR CODE HERE
-    // Replace 0.0 with an appropriate return value
-    return 0.0;
+    int k;
+    double remaining_cash = 0;
+    
+    for (k = 1; k <= num_games; k++) {
+        remaining_cash += simulate_game(strategy, init_amount, num_bets, init_seed);
+        init_seed++;
+    }
+    return remaining_cash/num_games;
 }
