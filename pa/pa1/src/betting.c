@@ -156,6 +156,98 @@ double fibonacci_bet(double init_amount, int num_bets)
     return init_amount;
 }
 
+
+double series_strategy(double init_amount, int num_bets)
+{
+    int n, bet_amount = 1, series_total = 0;
+
+    for (n = 1; n <= num_bets; n++) {
+        if (series_total + bet_amount > 1) {
+            bet_amount = 1 - series_total;
+
+            if (bet_amount > init_amount) {
+                bet_amount = init_amount;
+
+                if (flip_coin()) {
+                    init_amount += bet_amount;
+                    series_total += bet_amount;
+                    bet_amount += 1;
+
+                    if (series_total >= 1) {
+                        series_total = 0;
+
+                    }
+                } else {
+                      init_amount -= bet_amount;
+                      series_total -= bet_amount;
+
+                      if (init_amount == 0) {
+                          break;
+                      }
+                }
+            } else {
+                  if (flip_coin()) {
+                      init_amount += bet_amount;
+                      series_total += bet_amount;
+                      bet_amount += 1;
+
+                      if (series_total >= 1) {
+                          series_total = 0;
+
+                      }
+                  } else {
+                        init_amount -= bet_amount;
+                        series_total -= bet_amount;
+
+                        if (init_amount == 0) {
+                            break;
+                        }
+                  }
+            }
+        } else {
+              if (bet_amount > init_amount) {
+                  bet_amount = init_amount;
+
+                  if (flip_coin()) {
+                      init_amount += bet_amount;
+                      series_total += bet_amount;
+                      bet_amount += 1;
+
+                      if (series_total >= 1) {
+                          series_total = 0;
+
+                      }
+                  } else {
+                        init_amount -= bet_amount;
+                        series_total -= bet_amount;
+
+                        if (init_amount == 0) {
+                            break;
+                        }
+                  }
+              } else {
+                    if (flip_coin()) {
+                        init_amount += bet_amount;
+                        series_total += bet_amount;
+                        bet_amount += 1;
+
+                        if (series_total >= 1) {
+                            series_total = 0;
+
+                        }
+                    } else {
+                          init_amount -= bet_amount;
+                          series_total -= bet_amount;
+
+                          if (init_amount == 0) {
+                              break;
+                          }
+                    }
+              }
+        } 
+    }
+    return init_amount;
+}
 /* simulate_game: simulate a single game
  *
  * strategy: the betting strategy to use
@@ -181,9 +273,15 @@ double simulate_game(enum betting_strategies strategy, double init_amount,
     } else if (strategy == DOUBLE_ON_LOSS) {
           remaining_cash = double_loss(init_amount, num_bets);
 
-    } else {
+    } else if (strategy == FIB_STRATEGY) {
           remaining_cash = fibonacci_bet(init_amount, num_bets);
 
+    } else if (strategy == SERIES_STRATEGY) {
+          remaining_cash = series_strategy(init_amount, num_bets);
+
+    } else {
+          remaining_cash = flip_only(init_amount, num_bets);
+          
     }
     return remaining_cash;
 }
