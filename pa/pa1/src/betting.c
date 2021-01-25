@@ -1,6 +1,5 @@
 /* CS 152: A Game of Chance
- * FLYNN RICHARDSON
- */
+ * FLYNN RICHARDSON */
 
 #include <stdlib.h>
 #include <stdbool.h>
@@ -12,7 +11,52 @@
 #include "betting.h"
 
 
-/* bet_one_dollar: computes remaining cash from betting $1
+/* GENERAL HELPER FUNCTIONS */
+
+
+/* set_bet: lowers bet amount to the amount of cash on hand
+ * if bet amount is ever greater (cannot bet more money than we have!)
+ *
+ * bet_amount: the amount the player is betting
+ * cash: the amount of cash player has on hand
+ *
+ * Returns: the adjusted (or unadjusted) bet amount
+ */
+double set_bet(double bet_amount, double cash)
+{
+    /* Only adjust bet amount once it exceeds amount of cash */
+    if (bet_amount > cash) 
+    {
+        bet_amount = cash;
+    }
+    return bet_amount;
+}
+
+/* set_bet_series: limits bet amount to not exceed 1 + series total and 
+ * reinitializes bet amount to $1.00 once series restarts (only applicable
+ * for series_strategy function)
+ * 
+ * series_total = number to limit bet amount
+ * bet_amount = the amount the player is betting
+ *
+ * Returns: the adjusted (or unadjusted) bet amount
+ */ 
+double set_bet_series(int series_total, double bet_amount)
+{
+    /* Only adjust bet amount if sum of bet_amount and series_total 
+    is greater than 1 */
+    if (series_total + bet_amount > 1) 
+    {
+        bet_amount = 1 - series_total;
+    }
+    return bet_amount;
+}
+
+
+/* FIVE STRATEGIES FUNCTIONS /*
+
+
+/* bet_one_dollar: computes remaining cash from betting $1.00
    on coin flipping a specified number of times
  *
  * init_amount: the initial amount of cash on hand
@@ -20,7 +64,6 @@
  * 
  * Returns: amount of cash remaining as a double
  */
-
 double one_dollar(double init_amount, int num_bets)
 {
     int n;
@@ -31,11 +74,11 @@ double one_dollar(double init_amount, int num_bets)
         if (flip_coin()) 
         {
             /* Increase init_amount by 1 for every successful coin flip */
-            init_amount++;
+            init_amount += 1.00;
         } else 
         {
             /* Decrease init_amount by 1 for every unsuccessful coin flip */
-            init_amount--;
+            init_amount -= 1.00;
 
             /* Break out of loop if init_amount equals 0 */
             if (init_amount == 0) 
@@ -55,56 +98,34 @@ double one_dollar(double init_amount, int num_bets)
  * 
  * Returns: amount of cash remaining as a double
  */
-
 double double_on_win(double init_amount, int num_bets)
 {
-    int n, bet_amount = 1;
+    /* Initialize bet_amount as $1.00 */
+    int n;
+    double bet_amount = 1.00;
   
     /* Perform coin flip num_bets number of times */
     for (n = 1; n <= num_bets; n++) 
     {
-        /* Lower bet_amount to init_amount if bet_amount is greater
-        (Cannot bet more money than we have!) */
-        if (bet_amount > init_amount) 
+        /* Lower bet_amount to init_amount if bet_amount is greater */
+        bet_amount = set_bet(bet_amount, init_amount);
+
+        /* If coin flip is successful, add bet_amount to init_amount and 
+        double bet_amount for next iteration of loop */
+        if (flip_coin()) 
         {
-            bet_amount = init_amount;
-      
-            /* Increase init_amount by bet_amount and double bet_amount for
-            next round if coin flip is successful */
-            if (flip_coin()) 
-            {
-                init_amount += bet_amount;
-                bet_amount *= 2;
+            init_amount += bet_amount;
+            bet_amount *= 2;
         
-            /* Otherwise, decrease init_amount by bet_amount */
-            } else 
-            {
-                init_amount -= bet_amount;
-        
-                /* Break out of loop if init_amount equals 0 */
-                if (init_amount == 0) 
-                {
-                    break;
-                }
-            }
-      
-        /* Otherwise, do not change bet_amount */
+        /* Otherwise, decrease init_amount by bet_amount */
         } else 
         {
-            /* For lines 84-97, refer to 65-78 (same code) */
-            if (flip_coin()) 
-            {
-                init_amount += bet_amount;
-                bet_amount *= 2;
+            init_amount -= bet_amount;
         
-            } else 
+            /* Break out of loop if init_amount equals 0 */
+            if (init_amount == 0) 
             {
-                init_amount -= bet_amount;
-        
-                if (init_amount == 0) 
-                {
-                    break;
-                }
+                break;
             }
         }
     }
@@ -119,58 +140,38 @@ double double_on_win(double init_amount, int num_bets)
  * 
  * Returns: amount of cash remaining as a double
  */
-
 double double_on_loss(double init_amount, int num_bets)
 {
-  /* Initialize bet_amount as $1 */
-  int n, bet_amount = 1;
+    /* Initialize bet_amount as $1.00 */
+    int n; 
+    double bet_amount = 1.00;
   
-  /* The following code is the same as the double_on_win function,
-  except for lines 120-134 and lines 140-152. Refer to the former section for
-  new code commentary */
-  for (n = 1; n <= num_bets; n++) 
-  {
-      
-      if (bet_amount > init_amount) 
-      {
-          bet_amount = init_amount;
-      
-          /* Increase init_amount by bet_amount if coin flip is successful */
-          if (flip_coin()) 
-          {
-              init_amount += bet_amount;
-        
-          /* Otherwise, increase init_amount by bet_amount and double 
-          bet_amount for the next round */
-          } else 
-          {
-              init_amount -= bet_amount;
-              bet_amount *= 2;
-        
-              if (init_amount == 0) {
-                  break;
-              }
-          }
-      
-      } else 
-      {
+    /* Perform coin flip num_bets number of times */
+    for (n = 1; n <= num_bets; n++) 
+    {
+        /* Lower bet_amount to init_amount if bet_amount is greater */
+        bet_amount = set_bet(bet_amount, init_amount);
 
-          if (flip_coin())
-          {
-              init_amount += bet_amount;
+        /* If coin flip is successful, add bet_amount to init_amount */
+        if (flip_coin()) 
+        {
+            init_amount += bet_amount;
         
-          } else 
-          {
-              init_amount -= bet_amount;
-              bet_amount *= 2;
+        /* Otherwise, increase init_amount by bet_amount and double 
+        bet_amount for the next round */
+        } else 
+        {
+            init_amount -= bet_amount;
+            bet_amount *= 2;
         
-              if (init_amount == 0) 
-              {
-                  break;
-              }
-          }
-      }
-  }
+            /* Break out of loop if init_amount equals 0 */
+            if (init_amount == 0) 
+            {
+                break;
+            }
+        }
+      
+    }
   return init_amount;
 }
 
@@ -183,70 +184,47 @@ double double_on_loss(double init_amount, int num_bets)
  * 
  * Returns: amount of cash remaining as a double
  */
-
 double fibonacci_strategy(double init_amount, int num_bets)
 {
     /* Initialize bet_amount as $1, and initialize variables to
     represent the first two numbers in the fibonacci sequence */
-    int n, bet_amount = 1;
+    int n;
+    double bet_amount = 1; 
     int x = 0, y = 1;
-  
     
+    /* Perform coin flip num_bets number of times */
     for (n = 1; n <= num_bets; n++) 
     {
-        if (bet_amount > init_amount) 
-        {
-            bet_amount = init_amount;
-      
-            /* Increase init_amount by bet_amount and re-initialize variables 
-            if coin flip is successful */
-            if (flip_coin()) 
-            {
-                init_amount += bet_amount;
-                bet_amount = 1;
-                x = 0;
-                y = 1;
-        
-            /* However, if coin flip is unsuccessful (tails), decrease
-            init_amount by bet_amount, and set bet_amount equal to
-            the next number in the fibonacci sequence */
-            } else 
-            {
-                init_amount -= bet_amount;
-                bet_amount = x + y;
-                x = y;
-                y = bet_amount;
+        /* Lower bet_amount to init_amount if bet_amount is greater */
+        bet_amount = set_bet(bet_amount, init_amount);
 
-                if (init_amount == 0) 
-                {
-                    break;
-                }
-            }
-      
+        /* Increase init_amount by bet_amount and re-initialize variables 
+        if coin flip is successful */
+        if (flip_coin()) 
+        {
+            init_amount += bet_amount;
+            bet_amount = 1;
+            x = 0;
+            y = 1;
+        
+        /* However, if coin flip is unsuccessful (tails), decrease
+        init_amount by bet_amount, and set bet_amount equal to
+        the next number in the fibonacci sequence */
         } else 
         {
-            if (flip_coin()) 
+            init_amount -= bet_amount;
+            bet_amount = x + y;
+            x = y;
+            y = bet_amount;
+
+            /* Break out of loop if init_amount equals 0 */
+            if (init_amount == 0) 
             {
-                init_amount += bet_amount;
-                bet_amount = 1;
-                x = 0;
-                y = 1;
-        
-            } else 
-            {
-                init_amount -= bet_amount;
-                bet_amount = x + y;
-                x = y;
-                y = bet_amount;
-        
-                if (init_amount == 0)
-                {
-                    break;
-                }  
-            }
+                break;
+            }  
         }
     }
-  return init_amount;
+    return init_amount;
 }
 
 /* series_strategy: computes remaining cash after placing bets
@@ -259,132 +237,55 @@ double fibonacci_strategy(double init_amount, int num_bets)
  * 
  * Returns: amount of cash remaining as a double
  */
-
 double series_strategy(double init_amount, int num_bets)
 {
-    /* Note: A lot of code in this function is repetitive */
     /* Initialize bet_amount to $1 and series_total to $0 */
     int n, bet_amount = 1, series_total = 0;
   
+    /* Perform coin flip num_bets number of times */
     for (n = 1; n <= num_bets; n++) 
     {
-        /* Set bet_amount equal to 1 - series_total if the sum of
-        series_total and bet_amount yields a number greater than 1 */
-        if (series_total + bet_amount > 1) 
+        /* Alter bet_amount according to these two functions 
+        before proceeding */
+        bet_amount = set_bet_series(series_total, bet_amount);
+        bet_amount = set_bet(bet_amount, init_amount);
+
+        /* Increase both init_amount and series_total by bet_amount
+        and increase bet_amount by 1 if coin flip successful */
+        if (flip_coin()) 
         {
-            bet_amount = 1 - series_total;
-      
-            if (bet_amount > init_amount) 
+            init_amount += bet_amount;
+            series_total += bet_amount;
+            bet_amount += 1;
+          
+            /* If series_total reaches number greater than 1, set
+            series_total equal to 0 for next iteration of loop */
+            if (series_total >= 1) 
             {
-                bet_amount = init_amount;
-        
-                /* Increase both init_amount and series_total by bet_amount
-                and increase bet_amount by 1 if coin flip successful */
-                if (flip_coin()) 
-                {
-                    init_amount += bet_amount;
-                    series_total += bet_amount;
-                    bet_amount += 1;
-          
-                    /* If series_total reaches number greater than 1, set
-                    series_total equal to 0 (restarting series) */
-                    if (series_total >= 1) 
-                    {
-                        series_total = 0;
+                series_total = 0;
             
-                    }
-                
-                /* Decrease init_amount and series_total by bet_amount if
-                coin flip unsuccessful */
-                } else 
-                {
-                    init_amount -= bet_amount;
-                    series_total -= bet_amount;
-          
-                    if (init_amount == 0) 
-                    {
-                        break;
-                    }
-                }
-            } else 
-            {
-                if (flip_coin()) 
-                {
-                    init_amount += bet_amount;
-                    series_total += bet_amount;
-                    bet_amount += 1;
-          
-                    if (series_total >= 1) 
-                    {
-                    series_total = 0;
-            
-                    }
-                } else 
-                {
-                    init_amount -= bet_amount;
-                    series_total -= bet_amount;
-          
-                    if (init_amount == 0) 
-                    {
-                        break;
-                    }
-                }
-            }
+            }      
+        /* Decrease init_amount and series_total by bet_amount if
+        coin flip unsuccessful */
         } else 
         {
-            if (bet_amount > init_amount) 
+            init_amount -= bet_amount;
+            series_total -= bet_amount;
+          
+            /* Break out of loop if init_amount equals 0 */
+            if (init_amount == 0) 
             {
-                bet_amount = init_amount;
-        
-                if (flip_coin()) 
-                {
-                    init_amount += bet_amount;
-                    series_total += bet_amount;
-                    bet_amount += 1;
-          
-                    if (series_total >= 1) 
-                    {
-                        series_total = 0;
-            
-                    }
-                } else 
-                {
-                    init_amount -= bet_amount;
-                    series_total -= bet_amount;
-          
-                    if (init_amount == 0) 
-                    {
-                        break;
-                    }
-                }
-            } else 
-            {
-                if (flip_coin()) 
-                {
-                    init_amount += bet_amount;
-                    series_total += bet_amount;
-                    bet_amount += 1;
-          
-                    if (series_total >= 1) 
-                    {
-                        series_total = 0;
-            
-                    }
-                } else 
-                {
-                    init_amount -= bet_amount;
-                    series_total -= bet_amount;
-          
-                    if (init_amount == 0) 
-                    {
-                        break;
-                    }
-                }
+                break;
             }
-        } 
+        }
     }
     return init_amount;
 }
+
+
+/* SIMULATION FUNCTIONS */
+
+
 /* simulate_game: simulate a single game
 *
 * strategy: the betting strategy to use
