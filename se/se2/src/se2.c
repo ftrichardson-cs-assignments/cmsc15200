@@ -128,8 +128,15 @@ double bakhshali_recursive(double S, double guess)
 {
     assert(S > 0);
 
-    // YOUR CODE GOES HERE
-    // REPLACE 0.0 WITH A SUITABLE RETURN VALUE
-    
-    return 0.0;
+    double r, A;
+
+    if (fabs((S - (guess * guess))) < EPSILON) {
+        return guess;
+
+    } else {
+        r = (S - (guess * guess)) / (2 * guess);
+        A = r + guess;
+        guess = A - ((r * r) / (2 * A));
+        return bakhshali_recursive(S, guess);
+    }
 }
