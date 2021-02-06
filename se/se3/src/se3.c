@@ -25,7 +25,25 @@
  *         min_ptr points to: 4
  *         max_ptr points to: 7 
  */
+void find_min_max(int a[], int a_len, int *min_ptr, int *max_ptr)
+{
+    *min_ptr = a[0];
+    *max_ptr = a[0];
 
+    for (int n = 0; n < a_len; n++) 
+    {
+        if (a[n] < *min_ptr) 
+        {
+            *min_ptr = a[n];
+        } else 
+        {
+            if (a[n] > *max_ptr) 
+            {
+                *max_ptr = a[n];
+            }
+        }   
+    }
+}
 
 /* Exercise 2 - make_star_string
  * 
@@ -39,6 +57,21 @@
  *     make_star_string(3) yields "***"
  *     make_star_string(5) yields "*****"
  */
+char* make_star_string(int n)
+{
+    char* cp = (char*)malloc((n + 1) * sizeof(char));
+    for (int i = 0; i <= n; i++) 
+    {
+        if (i < n) 
+        {
+            cp[i] = '*';
+        } else 
+        {
+            cp[i] = '\0';
+        }
+    }
+    return cp;
+}
 
 /* Exercise 3 - make_histogram
  * 
@@ -63,7 +96,26 @@
  *         hist_len points to: 5
  *     In this example, there are three 4's, one 5, zero 6's, one 7, and one 8.
  */
+int* make_histogram(int a[], int a_len, int *hist_len)
+{
+    int min, max;
+    find_min_max(a, a_len, &min, &max);
+    *hist_len = max - min + 1;
+    int* hist_array = (int*)calloc(*hist_len, sizeof(int));
 
+    for (int n = 0; n < *hist_len; n++) 
+    {
+        for (int i = 0; i < a_len; i++) 
+        {
+            if (a[i] == min) 
+            {
+                hist_array[n]++;
+            }
+        }
+        min++;
+    }
+    return hist_array;
+}
 
 /* Exercise 4 - make_star_array
  * 
@@ -83,12 +135,15 @@
  *     Let b be the int array with elements {3, 1, 0, 1} 
  *     make_star_array(b, 4) yields the string array {"***", "*", "", "*"}
  */
-char** make_star_array(int a[], int a_len){
+char** make_star_array(int a[], int a_len)
+{
+    char** star_array = (char **)malloc(a_len * sizeof(char*));
 
-    // YOUR CODE GOES HERE
-    // REPLACE NULL WITH A SUITABLE RETURN VALUE
-
-    return NULL;
+    for (int i = 0; i < a_len; i++) 
+    {
+        star_array[i] = make_star_string(a[i]);
+    }
+    return star_array;
 }
 
 /* Exercise 5 - make_histogram_visualization
@@ -119,10 +174,11 @@ char** make_star_array(int a[], int a_len){
  *         the string array {"***", "*****"}
  *         hist_len_ptr points to: 2
  */
-char** make_histogram_visualization(int a[], int a_len, int *hist_len_ptr){
+char** make_histogram_visualization(int a[], int a_len, int *hist_len_ptr)
+{
+    int* hist_array;
+    hist_array = make_histogram(a, a_len, hist_len_ptr);
+    char** hist_star_array = make_star_array(hist_array, *hist_len_ptr);
 
-    // YOUR CODE GOES HERE
-    // REPLACE NULL WITH A SUITABLE RETURN VALUE
-
-    return NULL;
+    return hist_star_array;
 }
