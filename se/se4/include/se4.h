@@ -38,8 +38,7 @@ struct tagged_array {
  *     find_amount_of_denomination(88, 10, num_denomination) yields:
  *         80, num_denomination points to 8
  */
-int find_amount_of_denomination(int cents, int denomination, 
-                                int *num_denomination_ptr);
+int find_amount_of_denomination(int cents, int denomination, int *num_denomination_ptr);
 
 /* Exercise 1 - make_change
  *
@@ -56,9 +55,9 @@ int find_amount_of_denomination(int cents, int denomination,
  *         nickels: 1
  *         pennies: 2
  *     make_change(88) yields a struct coins with:
- *         quarters: 2
- *         dimes: 3
- *         nickels: 1
+ *         quarters: 3
+ *         dimes: 1
+ *         nickels: 0
  *         pennies: 3
  */
 struct coins make_change(int cents);
