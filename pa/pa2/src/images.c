@@ -106,7 +106,9 @@ ppm_t *create_greyscale(ppm_t *input)
     return greyscale;
 }
 
-
+//THESE TWO FUNCTION WERE BORROWED FROM ONLINE!!
+//My idea for a possible solution was to use max and min, so I am using these as an interim to 
+//see if my implementation is sensible
 int max(int num1, int num2) 
 {
     return (num1 > num2 ) ? num1 : num2;
@@ -138,23 +140,22 @@ ppm_t *blur(ppm_t *input, int size)
 
         for (int j = 0; j < blur->width; j++) 
         {
-            int average_red_pixel = 0;
-            int average_green_pixel = 0;
-            int average_blue_pixel = 0;
+            int sum_red_pixels = 0;
+            int sum_green_pixels = 0;
+            int sum_blue_pixels = 0;
 
-            for (int k = max(0, i - size); k < min(blur->height, i + size + 1); k++) 
+            for (int k = max(0, i - ((size + 1) / 2) - 1); k < min(blur->height, i + ((size + 1) / 2) - 1); k++) 
             {
-                for (int l = max(0, j - size); l < min(blur->width, j + size + 1); l++) 
+                for (int l = max(0, i - ((size + 1) / 2) - 1); l < min(blur->width, i + ((size + 1) / 2) - 1); l++) 
                 {
-                    average_red_pixel += input->image[i][j].red;
-                    average_green_pixel += input->image[i][j].green;
-                    average_blue_pixel += input->image[i][j].blue;
-
-                    blur->image[i][j].red = average_red_pixel;
-                    blur->image[i][j].green = average_green_pixel;
-                    blur->image[i][j].blue = average_blue_pixel;
+                    sum_red_pixels += input->image[k][l].red;
+                    sum_green_pixels += input->image[k][l].green;
+                    sum_blue_pixels += input->image[k][l].blue;
                 }
             }
+            blur->image[i][j].red = sum_red_pixels/(size * size);
+            blur->image[i][j].green = sum_green_pixels/(size * size);
+            blur->image[i][j].blue = sum_blue_pixels/(size * size);
         }
     }
     return blur;
