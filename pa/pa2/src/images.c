@@ -98,14 +98,23 @@ ppm_t *create_greyscale(ppm_t *input)
     return greyscale;
 }
 
-void blur_pixel(ppm_t *input, ppm_t *blur, int size, int a[])
+/* blur_pixel: blurs individual pixel according to size parameter
+ * (helper to blur function)
+ * 
+ * input: comparison ppm to set RGB values for blur
+ * blur: ppm to blur
+ * size: size of area around a pixel to blur (an odd integer
+ * pixel: array representing location of individual pixel
+ *
+ */
+void blur_pixel(ppm_t *input, ppm_t *blur, int size, int pixel[])
 {
     int sum_red_pixels = 0, sum_green_pixels = 0, sum_blue_pixels = 0;
 	int num_pixels = 0;
       
-    for (int k = a[0] - (((size + 1) / 2) - 1); k < a[0] + (((size + 1) / 2) - 1) + 1; k++)
+    for (int k = pixel[0] - (((size + 1) / 2) - 1); k < pixel[0] + (((size + 1) / 2) - 1) + 1; k++)
     {
-        for (int l = a[1] - (((size + 1) / 2) - 1); l < a[1] + (((size + 1) / 2) - 1) + 1; l++)
+        for (int l = pixel[1] - (((size + 1) / 2) - 1); l < pixel[1] + (((size + 1) / 2) - 1) + 1; l++)
         {
 			/* This handles edge cases along rows */
           	if (k >= 0 && k < blur->height) 
@@ -121,9 +130,9 @@ void blur_pixel(ppm_t *input, ppm_t *blur, int size, int a[])
           	}
         }
     }
-    blur->image[a[0]][a[1]].red = sum_red_pixels/num_pixels;
-    blur->image[a[0]][a[1]].green = sum_green_pixels/num_pixels;
-    blur->image[a[0]][a[1]].blue = sum_blue_pixels/num_pixels;
+    blur->image[pixel[0]][pixel[1]].red = sum_red_pixels/num_pixels;
+    blur->image[pixel[0]][pixel[1]].green = sum_green_pixels/num_pixels;
+    blur->image[pixel[0]][pixel[1]].blue = sum_blue_pixels/num_pixels;
 }
 
 /* blur: create new blurred ppm 
@@ -141,8 +150,8 @@ ppm_t *blur(ppm_t *input, int size)
   	{
     	for (int j = 0; j < blur->width; j++) 
     	{
-            int pixel_location[] = {i, j};
-      		blur_pixel(input, blur, size, pixel_location);
+            int pixel[] = {i, j};
+      		blur_pixel(input, blur, size, pixel);
     	}
   	}
   	return blur;
