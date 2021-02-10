@@ -21,7 +21,7 @@
  */
 int *filter_by_value(int data[], int data_len, int vals_of_interest[], int vals_len, int *result_len_ptr) 
 {
-	*result_len_ptr = 0;
+	*result_len_ptr = 0;	`
 
 	for (int a = 0; a < vals_len; a++) 
 	{

@@ -12,10 +12,10 @@ all: ta1 ta2 ta3
 ta1: ta1.c
 	$(CC) $(CFLAGS) $? -o $@ $(LDLIBS)
 
-ta3: ta2.c
+ta2: ta2.c
 	$(CC) $(CFLAGS) $? -o $@ $(LDLIBS)
 
-ta2: ta3.c
+ta3: ta3.c
 	$(CC) $(CFLAGS) $? -o $@ $(LDLIBS)
 
 clean:
