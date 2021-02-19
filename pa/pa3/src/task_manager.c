@@ -85,7 +85,6 @@ void tm_print(task_manager_t *tm)
     }
 }
 
-
 /* tm_is_empty: is the task manager empty?
  *
  * tm: a task manager
@@ -109,39 +108,29 @@ bool tm_is_empty(task_manager_t *tm)
  */
 int tm_add_task(task_manager_t *tm, int priority, int run_time)
 {
-    /* Allocate space for new task and update its data fields */
     dll_t* task = (dll_t*)malloc(sizeof(dll_t));
     task->priority = priority;
     task->run_time = run_time;
+    task->tid = tm->next_tid;
+    tm->next_tid++;
 
-    /* Update pointers and task identifier for an empty task list */
     if (tm->task_list->next == tm->task_list) 
     {
         tm->task_list->next = task;
         tm->task_list->prev = task;
         task->next = tm->task_list;
         task->prev = tm->task_list;
-        task->tid = 0; // I made this 0 because it would be the first element in the list
     }
 
-    /* Traverse list to last element before dummy node and update pointers accordingly */
-    dll_t* dummy_node = tm->task_list; // keeps track of list position
     task->next = tm->task_list;
-    tm->task_list->prev = task;
-    task->tid = 0;
 
-    while (tm->task_list->next != dummy_node)
+    if (tm->task_list->tid == tm->next_tid - 2)
     {
-        tm->task_list = tm->task_list->next;
-        task->tid++;
+        tm->task_list->next = task;
+        task->prev = tm->task_list;
     }
-    
-    tm->task_list->next = task;
-    task->prev = tm->task_list;
-    tm->next_tid++; //Increment next_tid by 1
 
     return task->tid;
-
 }
 
 
