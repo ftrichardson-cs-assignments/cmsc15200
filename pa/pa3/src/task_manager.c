@@ -69,13 +69,14 @@ void tm_free(task_manager_t *tm)
     // Your code here.
 }
 
-
 /* tm_print: (optional) print the contents of the task manager list 
  *
  * tm: a task manager
  */
 void tm_print(task_manager_t *tm)
 {
+    printf("%d\n", tm->max_priority);
+    printf("%d\n", tm->next_tid);
     for (int i = 0; i < tm->next_tid; i++) 
     {
         printf("%d", tm->task_list->tid);
