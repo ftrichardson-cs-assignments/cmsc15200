@@ -111,10 +111,10 @@ int tm_add_task(task_manager_t *tm, int priority, int run_time)
     dll_t* task = (dll_t*)malloc(sizeof(dll_t));
     task->priority = priority;
     task->run_time = run_time;
-    task->tid = tm->next_tid;
-    tm->next_tid++;
+    task->tid = tm->next_tid; // New task will have tid equal to current next_tid
+    tm->next_tid++; // Increment next_tid
 
-    if (tm->task_list->next == tm->task_list) 
+    if (tm->task_list->next == tm->task_list) // Updating pointers for empty list
     {
         tm->task_list->next = task;
         tm->task_list->prev = task;
@@ -122,14 +122,14 @@ int tm_add_task(task_manager_t *tm, int priority, int run_time)
         task->prev = tm->task_list;
     }
 
-    task->next = tm->task_list;
+    task->next = tm->task_list; // Added task's next field will point to dummy node
 
-    if (tm->task_list->tid == tm->next_tid - 2)
+    if (tm->task_list->tid == tm->next_tid - 2) // End of list
     {
-        tm->task_list->next = task;
-        task->prev = tm->task_list;
+        tm->task_list->next = task; // Current end of list's next field will point to task
+        task->prev = tm->task_list; // task's prev field will point to end of list
     }
-
+    
     return task->tid;
 }
 
