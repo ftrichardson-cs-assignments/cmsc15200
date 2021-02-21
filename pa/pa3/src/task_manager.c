@@ -1,6 +1,5 @@
 /* CMSC 15200, Winter 2021
  * PA #3 Task Manager: Source file for task manager
- * FLYNN RICHARDSON
  */
 
 #include <assert.h>
@@ -39,7 +38,6 @@ struct task_manager {
 
 /********* End type definitions *********/
 
-
 /* tm_create: create an empty task manager
  *
  * max_priority: task priorities will run from 0 to max_priority (inclusive).
@@ -53,12 +51,13 @@ task_manager_t *tm_create(int max_priority)
     empty_task_manager->next_tid = 0;
     
     empty_task_manager->task_list = (dll_t*)malloc(sizeof(dll_t));
+
+    /* Dummy node for circular doubly linked list */
     empty_task_manager->task_list->next = empty_task_manager->task_list;
     empty_task_manager->task_list->prev = empty_task_manager->task_list;
 
     return empty_task_manager;
 }
-
 
 /* tm_free: free all the space associated with a task manager
  *
@@ -66,7 +65,15 @@ task_manager_t *tm_create(int max_priority)
  */
 void tm_free(task_manager_t *tm)
 {
-    // Your code here.
+    dll_t* curr = tm->task_list;
+
+    while (curr != tm->task_list) 
+    {
+        curr = curr->next;
+        free(curr);
+    }
+
+    free(tm);
 }
 
 /* tm_print: (optional) print the contents of the task manager list 
@@ -75,14 +82,7 @@ void tm_free(task_manager_t *tm)
  */
 void tm_print(task_manager_t *tm)
 {
-    printf("%d\n", tm->max_priority);
-    printf("%d\n", tm->next_tid);
-    for (int i = 0; i < tm->next_tid; i++) 
-    {
-        printf("%d", tm->task_list->tid);
-        printf("%d", tm->task_list->priority);
-        printf("%d", tm->task_list->run_time);
-    }
+    
 }
 
 /* tm_is_empty: is the task manager empty?
@@ -94,8 +94,9 @@ void tm_print(task_manager_t *tm)
  */
 bool tm_is_empty(task_manager_t *tm)
 {
-    return false;
+    return tm->task_list->next == tm->task_list;
 }
+
 /* tm_add_task: add a new task with the specified priority and
  *   running time to the end of the task list.
  *
@@ -109,30 +110,21 @@ bool tm_is_empty(task_manager_t *tm)
 int tm_add_task(task_manager_t *tm, int priority, int run_time)
 {
     dll_t* task = (dll_t*)malloc(sizeof(dll_t));
+
     task->priority = priority;
     task->run_time = run_time;
-    task->tid = tm->next_tid; // New task will have tid equal to current next_tid
-    tm->next_tid++; // Increment next_tid
-
-    if (tm->task_list->next == tm->task_list) // Updating pointers for empty list
-    {
-        tm->task_list->next = task;
-        tm->task_list->prev = task;
-        task->next = tm->task_list;
-        task->prev = tm->task_list;
-    }
-
-    task->next = tm->task_list; // Added task's next field will point to dummy node
-
-    if (tm->task_list->tid == tm->next_tid - 2) // End of list
-    {
-        tm->task_list->next = task; // Current end of list's next field will point to task
-        task->prev = tm->task_list; // task's prev field will point to end of list
-    }
+    task->tid = tm->next_tid;
     
+    tm->task_list->prev->next = task;
+    task->prev = tm->task_list->prev;
+    task->next = tm->task_list;
+    tm->task_list->prev = task;
+
+    /* Need to increment next_tid to reflect addition of task */
+    tm->next_tid++;
+
     return task->tid;
 }
-
 
 /* tm_remove_task: remove the specified task from the task manager if
  *   it exists
@@ -145,11 +137,21 @@ int tm_add_task(task_manager_t *tm, int priority, int run_time)
  */
 bool tm_remove_task(task_manager_t *tm, int tid)
 {
-    // Your code here.
-    // Replace false with an appropriate return value
+    dll_t* curr = tm->task_list->next;
+
+    while (curr != tm->task_list) 
+    {
+        if (curr->tid == tid)
+        {
+            curr->prev->next = curr->next;
+            curr->next->prev = curr->prev;
+            tm->next_tid--;
+            return true;
+        }
+        curr = curr->next;
+    }
     return false;
 }
-
 
 /* tm_get_num_tasks: return the number of tasks on the list
  *
@@ -159,11 +161,8 @@ bool tm_remove_task(task_manager_t *tm, int tid)
  */
 int tm_get_num_tasks(task_manager_t *tm)
 {
-    // Your code here.
-    // Replace 0 with an appropriate return value
-    return 0;
+    return tm->next_tid;
 }
-
 
 /* tm_get_max_priority: get the maximum priority associated with a task manager
  *
@@ -173,11 +172,8 @@ int tm_get_num_tasks(task_manager_t *tm)
  */
 int tm_get_max_priority(task_manager_t *tm)
 {
-    // Your code here.
-    // Replace 0 with an appropriate return value
-    return 0;
+    return tm->max_priority;
 }
-
 
 /* tmp_get_num_jobs_by_priority: count the number of tasks for each priority level
  *
@@ -188,9 +184,27 @@ int tm_get_max_priority(task_manager_t *tm)
  */
 void tm_get_num_jobs_by_priority(task_manager_t *tm, int count_by_priority[])
 {
-    // Your code here.
-}
+    for (int i = 0; i <= tm->max_priority; i++) 
+    {
+        count_by_priority[i] = 0;
+    }
 
+    dll_t* curr = tm->task_list->next;
+
+    while (curr != tm->task_list) 
+    {
+        for (int j = 0; j <= tm->max_priority; j++) 
+        {
+            if (curr->priority == j) 
+            {
+                count_by_priority[j]++;
+                break;
+            }
+        }
+
+        curr = curr->next;
+    }   
+}
 
 /* tm_run_cycle: Runs each task for the length of time specified for
  *   its priority. Removes tasks that are finished from the task list.
@@ -205,7 +219,29 @@ void tm_get_num_jobs_by_priority(task_manager_t *tm, int count_by_priority[])
  */
 int tm_run_cycle(task_manager_t *tm, int time_slice_per_priority[])
 {
-    // Your code here.
-    // Replace 0 with an appropriate return value
-    return 0;
+    int total_time = 0;
+    dll_t* curr = tm->task_list->next;
+    
+    while (curr != tm->task_list) 
+    {
+        for (int p = 0; p <= tm->max_priority; p++) 
+        {
+            if (curr->priority == p) 
+            {
+                if (curr->run_time - time_slice_per_priority[p] <= 0) 
+                {
+                    int unused_time = -1 * (curr->run_time - time_slice_per_priority[p]);
+                    total_time += (time_slice_per_priority[p] - unused_time);
+                    tm_remove_task(tm, curr->tid);
+                } else 
+                {
+                    curr->run_time -= time_slice_per_priority[p];
+                    total_time += time_slice_per_priority[p];
+                }
+                break;
+            }
+        }
+        curr = curr->next;
+    }
+    return total_time;
 }
