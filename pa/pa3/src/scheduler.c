@@ -22,5 +22,3 @@ int run_tasks(task_manager_t *tm, int time_slices[], int *total_time_ptr)
 	}
 	return num_tasks;
 }
-
-
