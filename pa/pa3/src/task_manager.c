@@ -47,13 +47,21 @@ struct task_manager {
 task_manager_t *tm_create(int max_priority)
 {
     task_manager_t* empty_tm = (task_manager_t*)malloc(max_priority * sizeof(task_manager_t));
-    assert (empty_tm != NULL);
+    if (empty_tm == NULL) 
+    {
+        fprintf(stderr, "malloc failed\n");
+        exit(1);
+    }
 
     empty_tm->max_priority = max_priority;
     empty_tm->next_tid = 0;
     
     empty_tm->task_list = (dll_t*)malloc(sizeof(dll_t));
-    assert (empty_tm->task_list != NULL);
+    if (empty_tm->task_list == NULL) 
+    {
+        fprintf(stderr, "malloc failed\n");
+        exit(1);
+    }
 
     empty_tm->task_list->next = empty_tm->task_list;
     empty_tm->task_list->prev = empty_tm->task_list;
@@ -84,7 +92,12 @@ void tm_free(task_manager_t *tm)
  */
 void tm_print(task_manager_t *tm)
 {
-
+    dll_t* curr = tm->task_list->next;
+    while (curr != tm->task_list) 
+    {
+        printf("Task %d: %d seconds at priority %d\n", curr->tid, curr->run_time, curr->priority);
+        curr = curr->next;
+    }
 }
 
 /* tm_is_empty: is the task manager empty?
@@ -113,7 +126,11 @@ bool tm_is_empty(task_manager_t *tm)
 int tm_add_task(task_manager_t *tm, int priority, int run_time)
 {
     dll_t* task = (dll_t*)malloc(sizeof(dll_t));
-    assert (task != NULL);
+    if (task == NULL) 
+    {
+        fprintf(stderr, ",malloc failed\n");
+        exit(1);
+    }
 
     task->priority = priority;
     task->run_time = run_time;
