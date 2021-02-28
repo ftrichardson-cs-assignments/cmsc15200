@@ -159,30 +159,31 @@ int num_completions(tnode_t *trie, char *prefix)
 
 void completions_array(tnode_t* trie, char *temp_string, int *str_index, char **completions, int *index_ptr) 
 {
-    if (trie->final && trie->count == 1)
+    if (trie->count == 1 && trie->final)
     {
-        temp_string = (char*)realloc(temp_string, (*str_index + 1) * sizeof(char));
         temp_string[*str_index] = '\0';
-        completions[*index_ptr] = temp_string;
+        char* perm_string = (char*)malloc((*str_index + 2) * sizeof(char));
+        strcpy(perm_string, temp_string);
+        completions[*index_ptr] = perm_string;
         (*index_ptr)++;
+        *str_index = 0;
         return;
     }
-    
+  
     if (trie->final)
     {
-        temp_string = (char*)realloc(temp_string, (*str_index + 1) * sizeof(char));
         temp_string[*str_index] = '\0';
         completions[*index_ptr] = temp_string;
+        (*str_index)++;
         (*index_ptr)++;
     }
-    
-    for (int n = 0; n < NUM_CHARACTERS; n++)
+  
+    for (int n = 0; n < NUM_CHARACTERS; n++) 
     {
         char letter = (char) (n + (int) 'a');
-
+    
         if (trie->next[n])
         {
-            temp_string = (char*)realloc(temp_string, (*str_index + 1) * sizeof(char));
             temp_string[*str_index] = letter;
             (*str_index)++;
             completions_array(trie->next[n], temp_string, str_index, completions, index_ptr);
@@ -191,28 +192,28 @@ void completions_array(tnode_t* trie, char *temp_string, int *str_index, char **
 }
 
 /* Construct the completions of a prefix
- *
- * trie: a pointer to the trie
- * prefix: the prefix to complete
- * 
- * Returns: an array of completion strings
- */ 
+*
+* trie: a pointer to the trie
+* prefix: the prefix to complete
+* 
+* Returns: an array of completion strings
+*/ 
 char **get_completions(tnode_t *trie, char *prefix)
 {
     tnode_t* prefix_trie = traverse_trie(trie, prefix);
-   
-    if (!prefix_trie)
+  
+    if (!prefix_trie) 
     {
         return NULL;
     }
-
+  
     char** completions = (char**)malloc(num_completions(trie, prefix) * sizeof(char*));
-    char* temp_string = (char*)malloc(prefix_trie->longest * sizeof(char));
+    char* temp_string = (char*)malloc((prefix_trie->longest + 1) * sizeof(char));
     int str_index = 0;
     int index = 0;
-
+  
     completions_array(prefix_trie, temp_string, &str_index, completions, &index);
-    printf("%s\n", completions[1]);
-
+    printf("%s\n", completions[0]);
+  
     return completions;
 }
