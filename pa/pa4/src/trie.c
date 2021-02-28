@@ -164,7 +164,7 @@ concept that I struggle to understand, especially with more complex applications
 of recursion. I have commented some of my code so that it will be easier to see where 
 I am misunderstanding my code and/or my logic to solve this problem is wrong. I think if I'm
 able to solve this problem myself, the concept will be much clearer to me, so any hints you could give me
-about my implementation would be greatly appreciated! Thank you!!! */
+to rectify my implementation would be greatly appreciated! Thank you!!! */
 
 void completions_array(tnode_t* trie, char *temp_str, char **completions, int *index_ptr) 
 {
@@ -183,23 +183,22 @@ void completions_array(tnode_t* trie, char *temp_str, char **completions, int *i
         if (trie->next[n] != NULL && !trie->final)
         {
             temp_string[temp_str_index] = letter;
-            temp_str_index++;
+            temp_str_index++; // Increment index as letters are added
         }
 
         if (trie->next[n] == NULL && trie->final)
         {
             temp_string[str_index] = letter;
-            temp_string[str_index + 1] = '\0';
+            temp_string[str_index + 1] = '\0'; // Null terminator for final index
             temp_string = realloc(temp_string, (strlen(temp_string) + 1) * sizeof(char));
             completions[*index_ptr] = temp_string;
-            (*index_ptr)++;
+            (*index_ptr)++; // Increment index for completions as strings are added
         }
 
         /*I know this code doesn't currently handle a case such as "the" if "their" is in trie, but I 
         want to make sure I understand the recursion first before proceeding */
     }
 }
-
 
 /* Construct the completions of a prefix
  *
