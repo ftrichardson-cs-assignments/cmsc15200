@@ -170,8 +170,8 @@ void completions_array(tnode_t* trie, char *temp_string, int *str_index, char **
 
     if (trie->final)
     {
-        temp_string[*str_index] = '\0';
         temp_string = (char*)realloc(temp_string, (*str_index + 1) * sizeof(char));
+        temp_string[*str_index] = '\0';
         completions[*index_ptr] = temp_string;
         (*index_ptr)++;
     }
@@ -213,5 +213,10 @@ char **get_completions(tnode_t *trie, char *prefix)
 
     completions_array(prefix_trie, temp_string, &str_index, completions, &index);
 
+    for (int n = 0; n < num_completions(trie, prefix); n++) 
+    {
+        printf("%s\n", completions[n]);
+    }
+    
     return completions;
 }
