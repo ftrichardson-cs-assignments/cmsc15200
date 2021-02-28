@@ -93,6 +93,11 @@ void add_word(tnode_t *trie, char *word)
  */
 tnode_t *traverse_trie(tnode_t* trie, char *prefix) 
 {
+    if (!strcmp(prefix, "")) 
+    {
+        return trie;
+    }
+    
     for (int n = 0; n < strlen(prefix); n++) 
     {
         char letter = prefix[n];
@@ -144,11 +149,6 @@ int num_completions(tnode_t *trie, char *prefix)
 {
     tnode_t* prefix_trie = traverse_trie(trie, prefix);
    
-    if (!strcmp(prefix, ""))
-    {
-        return trie->count;
-    }
-     
     if (!prefix_trie) 
     {
         return 0;
@@ -157,46 +157,36 @@ int num_completions(tnode_t *trie, char *prefix)
     return prefix_trie->count;
 }
 
-
-
-/* The get_completions function I am struggling with greatly because recursion is still a
-concept that I struggle to understand, especially with more complex applications
-of recursion. I have commented some of my code so that it will be easier to see where 
-I am misunderstanding my code and/or my logic to solve this problem is wrong. I think if I'm
-able to solve this problem myself, the concept will be much clearer to me, so any hints you could give me
-to rectify my implementation would be greatly appreciated! Thank you!!! */
-
-void completions_array(tnode_t* trie, char *temp_string, char **completions, int *index_ptr) 
+void completions_array(tnode_t* trie, char *temp_string, int *str_index, char **completions, int *index_ptr) 
 {
-    if (!trie) //Base case (if trie->next[n] == NULL then !trie is true)
+    if (trie->count == 1 && trie->final)
     {
+        temp_string = (char*)realloc(temp_string, (*str_index + 1) * sizeof(char));
+        temp_string[*str_index] = '\0';
+        completions[*index_ptr] = temp_string;
+        (*index_ptr)++;
         return;
     }
-     
-    int temp_str_index = 0; //Separate index for temp_string
+
+    if (trie->final)
+    {
+        temp_string[*str_index] = '\0';
+        temp_string = (char*)realloc(temp_string, (*str_index + 1) * sizeof(char));
+        completions[*index_ptr] = temp_string;
+        (*index_ptr)++;
+    }
 
     for (int n = 0; n < NUM_CHARACTERS; n++)
     {
-        completions_array(trie->next[n], temp_string, completions, index_ptr); //Is this where I should be recursing?
         char letter = (char) (n + (int) 'a');
-        
-        if (trie->next[n] != NULL && !trie->final)
-        {
-            temp_string[temp_str_index] = letter;
-            temp_str_index++; // Increment index as letters are added
-        }
 
-        if (trie->next[n] == NULL && trie->final)
+        if (trie->next[n])
         {
-            temp_string[temp_str_index] = letter;
-            temp_string[temp_str_index + 1] = '\0'; // Null terminator for final index
-            temp_string = realloc(temp_string, (strlen(temp_string) + 1) * sizeof(char));
-            completions[*index_ptr] = temp_string;
-            (*index_ptr)++; // Increment index for completions as strings are added
+            temp_string = (char*)realloc(temp_string, (*str_index + 1) * sizeof(char));
+            temp_string[*str_index] = letter;
+            (*str_index)++;
+            completions_array(trie->next[n], temp_string, str_index, completions, index_ptr);
         }
-
-        /*I know this code doesn't currently handle a case such as "the" if "their" is in trie, but I 
-        want to make sure I understand the recursion first before proceeding */
     }
 }
 
@@ -209,17 +199,19 @@ void completions_array(tnode_t* trie, char *temp_string, char **completions, int
  */ 
 char **get_completions(tnode_t *trie, char *prefix)
 {
-    tnode_t* prefix_trie = traverse_trie(trie, prefix); // Brings me to the correct trie
-    char** completions = (char**)malloc(num_completions(trie, prefix) * sizeof(char*));
-    char* temp_string = (char*)malloc((prefix_trie->longest + 1) * sizeof(char));
-    int index = 0; // Index for completions
-
-    if (prefix && !prefix_trie)
+    tnode_t* prefix_trie = traverse_trie(trie, prefix);
+   
+    if (!prefix_trie) 
     {
-        return NULL; //Case of NO completions
+        return NULL;
     }
 
-    completions_array(prefix_trie, temp_string, completions, &index);
+    char** completions = (char**)malloc(num_completions(trie, prefix) * sizeof(char*));
+    char* temp_string = (char*)malloc((prefix_trie->longest + 1) * sizeof(char));
+    int str_index = 0;
+    int index = 0;
 
-    return completions; //After call, I return the filled array (which obviously is not currently accurate)
+    completions_array(prefix_trie, temp_string, &str_index, completions, &index);
+
+    return completions;
 }
