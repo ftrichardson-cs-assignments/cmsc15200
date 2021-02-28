@@ -157,18 +157,17 @@ int num_completions(tnode_t *trie, char *prefix)
     return prefix_trie->count;
 }
 
-/* Fills initialized array (helper to get_completions)
+/* Fills array (helper to get_completions)
  * 
  * trie: a pointer to the trie
  * temp_string: array to hold strings
- * str_index: index for temp_string
  * completions: array to hold completions
  * index_ptr: index for completions
  */
 void completions_array(tnode_t* trie, char *temp_string, char **completions, int *index_ptr) 
 {
     int str_index = 0;
-        
+    
     if (trie->count == 1 && trie->final)
     {
         temp_string[str_index] = '\0';
@@ -185,11 +184,10 @@ void completions_array(tnode_t* trie, char *temp_string, char **completions, int
         char* perm_string = (char*)malloc((str_index + 2) * sizeof(char));
         strcpy(perm_string, temp_string);
         completions[*index_ptr] = perm_string;
-        str_index++;
         (*index_ptr)++;
     }
   
-    for (int n = 0; n < NUM_CHARACTERS; n++) 
+    for (int n = 0; n < NUM_CHARACTERS; n++)
     {
         char letter = (char) (n + (int) 'a');
         
