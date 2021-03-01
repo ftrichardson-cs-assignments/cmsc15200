@@ -23,5 +23,5 @@ int main()
     printf("Is \"and\" in t?: %d\n", is_a_word(t, "and"));
     printf("Is \"ant\" in t?: %d\n", is_a_word(t, "ant"));
 
-    /* Add your functions calls here */
+    free_trie(t);
 }

@@ -192,8 +192,7 @@ void completions_array(tnode_t* trie, char *temp_string, int str_index, char **c
         if (trie->next[n])
         {
             temp_string[str_index] = letter;
-            str_index++;
-            completions_array(trie->next[n], temp_string, str_index, completions, index_ptr);
+            completions_array(trie->next[n], temp_string, str_index + 1, completions, index_ptr);
         }
     }
 }
@@ -220,8 +219,6 @@ char **get_completions(tnode_t *trie, char *prefix)
     char* temp_string = (char*)malloc((prefix_trie->longest + 1) * sizeof(char));
   
     completions_array(prefix_trie, temp_string, str_index, completions, &index);
-    printf("%s\n", completions[0]);
-    printf("%s\n", completions[1]);
   
     return completions;
 }
