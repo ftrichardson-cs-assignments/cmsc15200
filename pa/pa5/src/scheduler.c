@@ -88,6 +88,7 @@ int simulate_cores(task_manager_t *tm, int num_cores, int time_slice, int *total
             int execution_time;
             enum task_status status = execute_task(cores[n], time_slice, &execution_time);
             *total_time_ptr += execution_time;
+            num_cycles++;
         }
     }
     return num_cycles;
