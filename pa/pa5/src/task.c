@@ -124,7 +124,7 @@ enum task_status execute_task(task_t *task, int time_slice, int *execution_time_
     *execution_time_ptr += time_slice;
     task->run_time -= time_slice;
 
-    if (*execution_time_ptr < KEEP_THRESHOLD) 
+    if (task->run_time < KEEP_THRESHOLD) 
     {
         return TASK_KEEP;
     }
