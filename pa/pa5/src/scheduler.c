@@ -30,7 +30,7 @@ int simulate_cores(task_manager_t *tm, int num_cores, int time_slice, int *total
     int num_cycles = 0;
     task_t** cores = (task_t**)malloc(num_cores * sizeof(task_t*));
 
-    // Set every element in cores to NULL
+    // Set every element in cores to NULL (start out with empty cores)
     for (int n = 0; n < num_cores; n++) 
     {
         cores[n] = NULL;
@@ -80,8 +80,10 @@ int simulate_cores(task_manager_t *tm, int num_cores, int time_slice, int *total
         num_cycles++;
     }
 
-    // Check for any task remaining in core once task manager empty
-    for (int n = 0; n < num_cores; n++) 
+    printf("%d\n", *total_time_ptr);
+    
+    // Check for any tasks remaining in core once task manager empty
+    for (int n = 0; n < num_cores; n++)
     {
         if (cores[n] != NULL) 
         {
@@ -91,5 +93,6 @@ int simulate_cores(task_manager_t *tm, int num_cores, int time_slice, int *total
             num_cycles++;
         }
     }
+    printf("%d\n", *total_time_ptr);
     return num_cycles;
 }
