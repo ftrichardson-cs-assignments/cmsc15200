@@ -55,13 +55,14 @@ void sift_up(task_manager_t* tm)
     while (index > 0) 
     {
         int parent = (index - 1) / 2;
+
         if (cmp_task(tm->heap[index], tm->heap[parent]) < 0)
         {
             swap(&tm->heap[index], &tm->heap[parent]);
 
         } else 
         {
-            break; // No need to continue if swap not executed
+            break; // No need to continue
         }
         index = parent;
     }
@@ -69,6 +70,7 @@ void sift_up(task_manager_t* tm)
 
 void sift_down(task_manager_t *tm) 
 {
+    // Starting condition (root node)
     int index = 0;
     int left = 2 * index + 1;
     int right = 2 * index + 2;
@@ -79,12 +81,12 @@ void sift_down(task_manager_t *tm)
 
         if (cmp_task(tm->heap[right], tm->heap[left]) < 0) 
         {
-            most_urgent_index = right;
+            most_urgent_index = right; // Left takes precedence if same urgency
         }
 
-        if (cmp_task(tm->heap[index], tm->heap[most_urgent_index]) < 0)
+        if (cmp_task(tm->heap[index], tm->heap[most_urgent_index]) <= 0)
         {
-            break; // No need to continue if current task is more urgent than children
+            break; // No need to continue
 
         } else 
         {
@@ -92,8 +94,8 @@ void sift_down(task_manager_t *tm)
         }
 
         index = most_urgent_index;
-        left = (2 * index) + 1;
-        right = (2 * index) + 2;
+        left = 2 * index + 1;
+        right = 2 * index + 2;
     }
 }
 
@@ -109,7 +111,7 @@ task_manager_t *tm_create()
 
     if (empty_tm == NULL) 
     {
-        fprintf(stderr, "tm_create: not enough space for *task_manager_t\n");
+        fprintf(stderr, "tm_create: malloc failure (task_manager_t*)\n");
         exit(1);
     }
     empty_tm->next_heap_slot = 0;
@@ -118,7 +120,7 @@ task_manager_t *tm_create()
 
     if (empty_tm->heap == NULL) 
     {
-        fprintf(stderr, "tm_create: not enough space for **task_t\n");
+        fprintf(stderr, "tm_create: malloc failure (task_t**)\n");
         exit(1);
     }
     
@@ -135,7 +137,10 @@ void tm_free(task_manager_t *tm)
 {
     for (int n = 0; n < tm->next_heap_slot; n++) 
     {
-        free(tm->heap[n]); // Added tasks != NULL, so no need to check if NULL 
+        if (tm->heap[n] != NULL) 
+        {
+            free(tm->heap[n]);
+        }
     }
     free(tm->heap);
     free(tm);
@@ -219,6 +224,7 @@ task_t *tm_remove_most_urgent_task(task_manager_t *tm)
     task_t* most_urgent_task = tm->heap[0];
     tm->heap[0] = tm->heap[tm->next_heap_slot - 1]; // Add last value in heap to root
     tm->next_heap_slot--; // Decrement number of elements in heap
+
     sift_down(tm);
 
     return most_urgent_task;
