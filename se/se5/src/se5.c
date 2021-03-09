@@ -37,8 +37,12 @@ inttree_t* make_tree_node(int val, inttree_t* left, inttree_t* right)
  */ 
 bool path_adds_to(inttree_t *t, int num)
 {
-    // YOUR CODE HERE
-    return false;
+    if (t == NULL) 
+    {
+        return num == 0;
+    }
+    int path_sum = num - t->val;
+    return path_adds_to(t->right, path_sum) || path_adds_to(t->left, path_sum);
 }
 
 /* preorder: search for a value in a tree using
@@ -51,8 +55,21 @@ bool path_adds_to(inttree_t *t, int num)
  */ 
 int preorder(inttree_t *t, int num)
 {
-    // YOUR CODE HERE
-    return 0;
+    if (t == NULL) 
+    {
+        return 0;
+    }
+    
+    if (t->val == num)
+    {
+        return 1;
+    }
+
+    if (num > t->val) 
+    {
+        return 1 + preorder(t->right, num);
+    }
+    return 1 + preorder(t->left, num);
 }
 
 /* inorder: search for a value in a tree using
