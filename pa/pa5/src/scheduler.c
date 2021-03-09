@@ -11,7 +11,25 @@
 #include "task_manager.h"
 #include "scheduler.h"
 
-/********* Helper functions *********/
+/* cores_is_empty: checks if cores array is empty
+ *
+ * tm: a pointer to a task manager
+ * num_cores: the number of cores to simulate
+ * cores: array to represent cores
+ *
+ * Returns: bool
+ */
+bool cores_is_empty(task_manager_t *tm, int num_cores, task_t** cores) 
+{
+    for (int n = 0; n < num_cores; n++) 
+    {
+        if (cores[n] != NULL) 
+        {
+            return false;
+        }
+    }
+    return true;
+}
 
 /* simulate_cores: simulates task execution in a set of cores
  *
@@ -29,6 +47,11 @@ int simulate_cores(task_manager_t *tm, int num_cores, int time_slice, int *total
     *total_time_ptr = 0;
     int num_cycles = 0;
     task_t** cores = (task_t**)malloc(num_cores * sizeof(task_t*));
+    if (cores == NULL) 
+    {
+        fprintf(stderr, "simulate_cores: malloc failure (task_t**)\n");
+        exit(1);
+    }
 
     // Set every element in cores to NULL (start out with empty cores)
     for (int n = 0; n < num_cores; n++) 
@@ -36,12 +59,13 @@ int simulate_cores(task_manager_t *tm, int num_cores, int time_slice, int *total
         cores[n] = NULL;
     }
 
-    while (!tm_is_empty(tm)) 
+    // Perform cycles until task manager empty
+    while (!tm_is_empty(tm))
     {
         // Fill cores
-        for (int n = 0; n < num_cores; n++) 
+        for (int n = 0; n < num_cores; n++)
         {
-            if (cores[n] == NULL) 
+            if (cores[n] == NULL)
             {
                 cores[n] = tm_remove_most_urgent_task(tm);
             }
@@ -80,19 +104,27 @@ int simulate_cores(task_manager_t *tm, int num_cores, int time_slice, int *total
         num_cycles++;
     }
 
-    printf("%d\n", *total_time_ptr);
-    
-    // Check for any tasks remaining in core once task manager empty
-    for (int n = 0; n < num_cores; n++)
+    // Perform cycles until cores array empty
+    while (!cores_is_empty(tm, num_cores, cores)) 
     {
-        if (cores[n] != NULL) 
+        // Check for any tasks remaining in core once task manager empty
+        for (int n = 0; n < num_cores; n++)
         {
-            int execution_time;
-            enum task_status status = execute_task(cores[n], time_slice, &execution_time);
-            *total_time_ptr += execution_time;
-            num_cycles++;
+            if (cores[n] != NULL) 
+            {
+                int execution_time;
+                enum task_status status = execute_task(cores[n], time_slice, &execution_time);
+                *total_time_ptr += execution_time;
+
+                if (status == TASK_DONE) 
+                {
+                    free(cores[n]);
+                    cores[n] = NULL;
+                }
+            }
         }
+        num_cycles++;
     }
-    printf("%d\n", *total_time_ptr);
+    free(cores);
     return num_cycles;
 }

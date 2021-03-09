@@ -29,8 +29,14 @@ int hash(htable_t ht, char *s)
  */ 
 bool is_full(htable_t ht)
 {
-    // YOUR CODE HERE
-    return false;
+    for (int n = 0; n < ht.size; n++) 
+    {
+        if (ht.table[n] == NULL) 
+        {
+            return false;
+        }
+    }
+    return true;
 }
 
 /* Determines whether a string is in the hash table or,
@@ -47,8 +53,27 @@ bool is_full(htable_t ht)
  */ 
 int found_at(htable_t ht, char *s, bool *found)
 {
-    // YOUR CODE HERE
-    return 0;
+    int index = hash(ht, s);
+    *found = false;
+
+    for (int n = 0; n < ht.size; n++) 
+    {
+        if (ht.table[n] == s) 
+        {
+            *found = true;
+            return n;
+        }
+
+        int possible_index = (n + index) % ht.size;
+
+        if (ht.table[possible_index] == NULL) 
+        {
+            ht.table[possible_index] = s;
+            return possible_index;
+        }
+
+    }
+    return -1;
 }
 
 /* Determines whether a string is in the hash table
@@ -60,8 +85,9 @@ int found_at(htable_t ht, char *s, bool *found)
  */ 
 bool query(htable_t ht, char *s)
 {
-    // YOUR CODE HERE
-    return false;
+    bool found;
+    found_at(ht, s, &found);
+    return found;
 }
 
 /* Adds string to hash table
@@ -73,6 +99,12 @@ bool query(htable_t ht, char *s)
  */ 
 bool add(htable_t ht, char *s)
 {
-    // YOUR CODE HERE
-    return false;
+    bool found;
+    int index = found_at(ht, s, &found);
+
+    if (found || index == -1) 
+    {
+        return false;
+    }
+    return true;
 }

@@ -1,0 +1,200 @@
+{
+  "id": "Criterion v2.3.3",
+  "passed": 23,
+  "failed": 2,
+  "errored": 0,
+  "skipped": 0,
+  "test_suites": [
+    {
+      "name": "query",
+      "passed": 8,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "tests": [
+        {
+          "name": "testH",
+          "assertions": 1,
+          "status": "PASSED"
+        },
+        {
+          "name": "testG",
+          "assertions": 1,
+          "status": "PASSED"
+        },
+        {
+          "name": "testF",
+          "assertions": 1,
+          "status": "PASSED"
+        },
+        {
+          "name": "testE",
+          "assertions": 1,
+          "status": "PASSED"
+        },
+        {
+          "name": "testD",
+          "assertions": 1,
+          "status": "PASSED"
+        },
+        {
+          "name": "testC",
+          "assertions": 1,
+          "status": "PASSED"
+        },
+        {
+          "name": "testB",
+          "assertions": 1,
+          "status": "PASSED"
+        },
+        {
+          "name": "testA",
+          "assertions": 1,
+          "status": "PASSED"
+        }
+      ]
+    },
+    {
+      "name": "is_full",
+      "passed": 3,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "tests": [
+        {
+          "name": "testC",
+          "assertions": 1,
+          "status": "PASSED"
+        },
+        {
+          "name": "testB",
+          "assertions": 1,
+          "status": "PASSED"
+        },
+        {
+          "name": "testA",
+          "assertions": 1,
+          "status": "PASSED"
+        }
+      ]
+    },
+    {
+      "name": "found_at",
+      "passed": 7,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "tests": [
+        {
+          "name": "testG",
+          "assertions": 2,
+          "status": "PASSED"
+        },
+        {
+          "name": "testE",
+          "assertions": 2,
+          "status": "PASSED"
+        },
+        {
+          "name": "testF",
+          "assertions": 2,
+          "status": "PASSED"
+        },
+        {
+          "name": "testD",
+          "assertions": 2,
+          "status": "PASSED"
+        },
+        {
+          "name": "testC",
+          "assertions": 2,
+          "status": "PASSED"
+        },
+        {
+          "name": "testB",
+          "assertions": 2,
+          "status": "PASSED"
+        },
+        {
+          "name": "testA",
+          "assertions": 2,
+          "status": "PASSED"
+        }
+      ]
+    },
+    {
+      "name": "add",
+      "passed": 5,
+      "failed": 2,
+      "errored": 0,
+      "skipped": 0,
+      "tests": [
+        {
+          "name": "testG",
+          "assertions": 1,
+          "status": "PASSED"
+        },
+        {
+          "name": "testF",
+          "assertions": 1,
+          "status": "PASSED"
+        },
+        {
+          "name": "testE",
+          "assertions": 1,
+          "status": "FAILED",
+          "messages": [
+            "./tests/test_se6.c:451:  ",
+            "    Hash table used in failed test: ",
+            "        ht.size = 4",
+            "        ht.table[0] = 'd'",
+            "        ht.table[1] = NULL",
+            "        ht.table[2] = NULL",
+            "        ht.table[3] = 'c'",
+            "    Test failed: add(ht, 'ab')",
+            "        hash('ab'): 3",
+            "    Checking return value:",
+            "        Actual: 0",
+            "        Expected: 1",
+            "    The filter to run this specific test is: --filter add/testE"
+          ]
+        },
+        {
+          "name": "testD",
+          "assertions": 1,
+          "status": "FAILED",
+          "messages": [
+            "./tests/test_se6.c:428:  ",
+            "    Hash table used in failed test: ",
+            "        ht.size = 4",
+            "        ht.table[0] = 'd'",
+            "        ht.table[1] = NULL",
+            "        ht.table[2] = NULL",
+            "        ht.table[3] = 'c'",
+            "    Test failed: add(ht, 'bb')",
+            "        hash('bb'): 0",
+            "    Checking return value:",
+            "        Actual: 0",
+            "        Expected: 1",
+            "    The filter to run this specific test is: --filter add/testD"
+          ]
+        },
+        {
+          "name": "testC",
+          "assertions": 2,
+          "status": "PASSED"
+        },
+        {
+          "name": "testB",
+          "assertions": 1,
+          "status": "PASSED"
+        },
+        {
+          "name": "testA",
+          "assertions": 2,
+          "status": "PASSED"
+        }
+      ]
+    }
+  ]
+}

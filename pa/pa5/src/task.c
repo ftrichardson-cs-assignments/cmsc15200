@@ -61,22 +61,14 @@ void free_task(task_t *task)
  */
 int cmp_task(task_t *task1, task_t *task2)
 {
-    if (task1->priority > task2->priority)
+    if (task1->priority > task2->priority ||
+       (task1->priority == task2->priority && task1->run_time < task2->run_time))
     {
         return -1;
     }
 
-    if (task2->priority > task1->priority)
-    {
-        return 1;
-    }
-
-    if (task1->priority == task2->priority && task1->run_time < task2->run_time) 
-    {
-        return -1;
-    }
-
-    if (task2->priority == task1->priority && task2->run_time < task1->run_time) 
+    if (task2->priority > task1->priority ||
+       (task2->priority == task1->priority && task2->run_time < task1->run_time))
     {
         return 1;
     }
@@ -90,12 +82,7 @@ int cmp_task(task_t *task1, task_t *task2)
  */
 void print_task(task_t *task)
 {
-    printf("Task %d\n", task->tid);
-    printf("---------\n");
-    printf("tid: %d\n", task->tid);
-    printf("priority: %d\n", task->priority);
-    printf("run_time: %d\n", task->run_time);
-    printf("\n");
+    
 }
 
 /* execute_task - do one time slice of work for a task

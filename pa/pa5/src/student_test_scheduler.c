@@ -20,9 +20,17 @@ int main()
     tm_add_task(tm, t2);
     tm_add_task(tm, t3);
 
+    printf("\n");
+    tm_print(tm);
+    printf("\n");
+
     int total_time;
     int num_cycles = simulate_cores(tm, 2, 6, &total_time);
     printf("total_time: %d  num_cycles: %d\n", total_time, num_cycles);
+
+    printf("\n");
+    tm_print(tm);
+    printf("\n");
 
     tm_free(tm);
 }

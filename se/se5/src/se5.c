@@ -27,6 +27,11 @@ inttree_t* make_tree_node(int val, inttree_t* left, inttree_t* right)
     return t; 
 }
 
+void print_tree(inttree_t *t) 
+{
+    printf("val: %d\n", t->val);
+}
+
 /* path_adds_to: find whether a tree has a path of nodes from
  *     root to leaf whose values adds to num
  * 
@@ -37,10 +42,12 @@ inttree_t* make_tree_node(int val, inttree_t* left, inttree_t* right)
  */ 
 bool path_adds_to(inttree_t *t, int num)
 {
+    // Base case
     if (t == NULL) 
     {
         return num == 0;
     }
+
     int path_sum = num - t->val;
     return path_adds_to(t->right, path_sum) || path_adds_to(t->left, path_sum);
 }
@@ -55,21 +62,21 @@ bool path_adds_to(inttree_t *t, int num)
  */ 
 int preorder(inttree_t *t, int num)
 {
-    if (t == NULL) 
+    printf("%d\n", num);
+    while (t->val != num) 
     {
-        return 0;
-    }
-    
-    if (t->val == num)
-    {
-        return 1;
-    }
+        if (num > t->val) 
+        {
+            print_tree(t);
+            t = t->right;
+        }
 
-    if (num > t->val) 
-    {
-        return 1 + preorder(t->right, num);
+        if (num < t->val) 
+        {
+            print_tree(t);
+            t = t->left;
+        }
     }
-    return 1 + preorder(t->left, num);
 }
 
 /* inorder: search for a value in a tree using

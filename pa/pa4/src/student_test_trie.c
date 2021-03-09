@@ -17,8 +17,8 @@ int main()
 {
     tnode_t *t = create_trie_node();
 
+    add_word(t, "ante");
     add_word(t, "and");
-    add_word(t, "are");
 
     printf("Is \"and\" in t?: %d\n", is_a_word(t, "and"));
     printf("Is \"ant\" in t?: %d\n", is_a_word(t, "ant"));

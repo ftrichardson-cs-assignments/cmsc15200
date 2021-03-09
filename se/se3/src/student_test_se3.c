@@ -22,5 +22,9 @@ void free_star_array(char **a, int a_len){
 int main()
 {
     /** Add calls to your functions here **/
-    printf("make_star_string(4): %s\n", make_star_string(4));
+    printf("make_star_string(1): %s\n", make_star_string(1));
 }
+
+
+
+

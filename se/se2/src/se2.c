@@ -37,19 +37,23 @@ double compute_payoff_amount(double initial, double payment, int days_since_loan
 
     double payoff_amount;
     
-    if (days_since_loan_started <= 0 || days_since_loan_started < payment_interval) {
+    if (days_since_loan_started <= 0 || days_since_loan_started < payment_interval) 
+    {
         return initial;
 
-    } else {
+    } else 
+    {
         payoff_amount = initial - ((days_since_loan_started / payment_interval) * payment);
 
-        if (payoff_amount <= 0) {
+        if (payoff_amount <= 0) 
+        {
             return 0;
 
-        } else {
+        } else 
+        {
             return payoff_amount;
         }
-        }
+    }
 }
   
 /*
@@ -68,11 +72,14 @@ int compute_leonardo(int n)
 {
     int i, x = 1, y = 1, z;
 
-    if (n == 0 || n == 1) {
+    if (n == 0 || n == 1) 
+    {
         return 1;
 
-    } else {
-        for (i = 2; i <= n; i++) {
+    } else 
+    {
+        for (i = 2; i <= n; i++) 
+        {
             z = x + y + 1;
             x = y;
             y = z;
@@ -101,7 +108,8 @@ double bakhshali_iterative(double S, double guess)
 
     double r, A;
 
-    while (fabs((S - (guess * guess))) >= EPSILON) {
+    while (fabs((S - (guess * guess))) >= EPSILON) 
+    {
         r = (S - (guess * guess)) / (2 * guess);
         A = r + guess;
         guess = A - ((r * r) / (2 * A));
@@ -130,10 +138,12 @@ double bakhshali_recursive(double S, double guess)
 
     double r, A;
 
-    if (fabs((S - (guess * guess))) < EPSILON) {
+    if (fabs((S - (guess * guess))) < EPSILON) 
+    {
         return guess;
 
-    } else {
+    } else 
+    {
         r = (S - (guess * guess)) / (2 * guess);
         A = r + guess;
         guess = A - ((r * r) / (2 * A));

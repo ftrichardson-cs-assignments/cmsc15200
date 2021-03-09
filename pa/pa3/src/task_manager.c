@@ -80,7 +80,7 @@ void tm_free(task_manager_t *tm)
     while (curr != tm->task_list) 
     {
         curr = curr->next;
-        free(curr);
+        free(curr->prev);
     }
 
     free(tm);
@@ -128,7 +128,7 @@ int tm_add_task(task_manager_t *tm, int priority, int run_time)
     dll_t* task = (dll_t*)malloc(sizeof(dll_t));
     if (task == NULL) 
     {
-        fprintf(stderr, ",malloc failed\n");
+        fprintf(stderr, "malloc failed\n");
         exit(1);
     }
 
@@ -141,9 +141,16 @@ int tm_add_task(task_manager_t *tm, int priority, int run_time)
     task->next = tm->task_list;
     tm->task_list->prev = task;
 
-    tm->next_tid++; // Increment to reflect addition of task
+    tm->next_tid++;
 
     return task->tid;
+}
+
+void free_dll_node(dll_t* task) 
+{
+    task->prev->next = task->next;
+    task->next->prev = task->prev;
+    free(task);
 }
 
 /* tm_remove_task: remove the specified task from the task manager if
@@ -163,8 +170,7 @@ bool tm_remove_task(task_manager_t *tm, int tid)
     {
         if (curr->tid == tid)
         {
-            curr->prev->next = curr->next;
-            curr->next->prev = curr->prev;
+            free_dll_node(curr);
             tm->next_tid--;
             return true;
         }
@@ -214,17 +220,9 @@ void tm_get_num_jobs_by_priority(task_manager_t *tm, int count_by_priority[])
 
     while (curr != tm->task_list) 
     {
-        for (int j = 0; j <= tm->max_priority; j++) 
-        {
-            if (curr->priority == j) 
-            {
-                count_by_priority[j]++;
-                break;
-            }
-        }
-
+        count_by_priority[curr->priority]++;
         curr = curr->next;
-    }   
+    }
 }
 
 /* tm_run_cycle: Runs each task for the length of time specified for
@@ -253,7 +251,7 @@ int tm_run_cycle(task_manager_t *tm, int time_slice_per_priority[])
                 {
                     int unused_time = -1 * (curr->run_time - time_slice_per_priority[p]);
                     total_time += (time_slice_per_priority[p] - unused_time);
-                    tm_remove_task(tm, curr->tid);
+                    free_dll_node(curr);
 
                 } else
                 {

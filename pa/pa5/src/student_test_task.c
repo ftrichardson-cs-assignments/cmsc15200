@@ -22,22 +22,27 @@ int main()
     printf("t1 ? t2: %d\n", cmp_task(t1, t2));
     printf("t2 ? t1: %d\n", cmp_task(t2, t1));
     printf("t2 ? t3: %d\n", cmp_task(t2, t3));
+    printf("\n");
 
     int et;
-    printf("execute t0 w/ 10: %d", execute_task(t0, 10, &et));
-    printf("  et: %d  ", et);
+    printf("execute t0 w/ 10: %d\n", execute_task(t0, 10, &et));
+    printf("  et: %d\n", et);
+    printf("\n");
     print_task(t0);
 
-    printf("execute t0 w/ 5: %d", execute_task(t0, 5, &et));
-    printf("  et: %d  ", et);
+    printf("execute t0 w/ 10: %d\n", execute_task(t0, 5, &et));
+    printf("  et: %d\n", et);
+    printf("\n");
     print_task(t0);
 
-    printf("execute t0 w/ 3: %d", execute_task(t0, 3, &et));
-    printf("  et: %d  ", et);
+    printf("execute t0 w/ 10: %d\n", execute_task(t0, 3, &et));
+    printf("  et: %d\n", et);
+    printf("\n");
     print_task(t0);
 
-    printf("execute t0 w/ 3: %d", execute_task(t0, 3, &et));
-    printf("  et: %d  ", et);
+    printf("execute t0 w/ 10: %d\n", execute_task(t0, 3, &et));
+    printf("  et: %d\n", et);
+    printf("\n");
     print_task(t0);
 
     free_task(t0);

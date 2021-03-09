@@ -60,15 +60,9 @@ void find_min_max(int a[], int a_len, int *min_ptr, int *max_ptr)
 char* make_star_string(int n)
 {
     char* cp = (char*)malloc((n + 1) * sizeof(char));
-    for (int i = 0; i <= n; i++) 
+    for (int i = 0; i < n; i++) 
     {
-        if (i < n) 
-        {
-            cp[i] = '*';
-        } else 
-        {
-            cp[i] = '\0';
-        }
+        cp[i] = '*';
     }
     return cp;
 }

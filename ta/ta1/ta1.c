@@ -21,7 +21,7 @@
  */
 int *filter_by_value(int data[], int data_len, int vals_of_interest[], int vals_len, int *result_len_ptr) 
 {
-	*result_len_ptr = 0;	`
+	*result_len_ptr = 0;
 
 	for (int a = 0; a < vals_len; a++) 
 	{
@@ -40,17 +40,16 @@ int *filter_by_value(int data[], int data_len, int vals_of_interest[], int vals_
 	}
 
 	int* array = (int*)malloc(*result_len_ptr * sizeof(int));
+	int array_index = 0;
 
-	for (int j = 0; j < *result_len_ptr; j++) 
+	for (int x = 0; x < data_len; x++) 
 	{
-		for (int x = 0; x < vals_len; x++) 
+		for (int y = 0; y < vals_len; y++) 
 		{
-			for (int y = 0; y < data_len; y++) 
+			if (data[x] == vals_of_interest[y]) 
 			{
-				if (data[y] == vals_of_interest[x]) 
-				{
-					array[j] = data[y];
-				}
+				array[array_index] = data[x];
+				array_index++;
 			}
 		}
 	}
@@ -64,6 +63,10 @@ int main()
 	int data_len = 8;
 	int vals_of_interest[] = {1, 6};
 	int vals_len = 2;
-	filter_by_value(data, data_len, vals_of_interest, vals_len, &p);
-	printf("%d", p);
+	int* array = filter_by_value(data, data_len, vals_of_interest, vals_len, &p);
+	printf("%d\n", p);
+	for (int i = 0; i < p; i++) 
+	{
+		printf("%d", array[i]);
+	}
 }

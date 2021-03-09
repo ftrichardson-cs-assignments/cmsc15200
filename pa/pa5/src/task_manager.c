@@ -40,6 +40,10 @@ void swap(task_t **p, task_t **q)
 
 /********* Helper functions *********/
 
+/* double_heap_size: doubles current size of heap
+ *
+ * tm: a pointer to a task manager
+ */
 void double_heap_size(task_manager_t* tm) 
 {
     // GROWTH_MULTIPLIER doubles current heap size
@@ -48,6 +52,10 @@ void double_heap_size(task_manager_t* tm)
     tm->heap_size *= GROWTH_MULTIPLIER;
 }
 
+/* sift_up: restores heap property after task added to heap
+ *
+ * tm: a pointer to a task manager
+ */
 void sift_up(task_manager_t* tm) 
 {
     int index = tm->next_heap_slot;
@@ -68,9 +76,13 @@ void sift_up(task_manager_t* tm)
     }
 }
 
+/* sift_down: restores heap property after removing task from heap
+ *
+ * tm: a pointer to a task manager
+ */
 void sift_down(task_manager_t *tm) 
 {
-    // Starting condition (root node)
+    // Start at root node
     int index = 0;
     int left = 2 * index + 1;
     int right = 2 * index + 2;
@@ -81,7 +93,7 @@ void sift_down(task_manager_t *tm)
 
         if (cmp_task(tm->heap[right], tm->heap[left]) < 0) 
         {
-            most_urgent_index = right; // Left takes precedence if same urgency
+            most_urgent_index = right; // Left takes precedence if urgencies equal
         }
 
         if (cmp_task(tm->heap[index], tm->heap[most_urgent_index]) <= 0)
@@ -153,19 +165,7 @@ void tm_free(task_manager_t *tm)
  */
 void tm_print(task_manager_t *tm)
 {
-    printf("Task Manager\n");
-    printf("---------\n");
-    printf("next_heap_slot : %d\n", tm->next_heap_slot);
-    printf("heap_size : %d\n", tm->heap_size);
-    printf("heap :");
-    printf("\n");
     
-    for (int n = 0; n < tm->next_heap_slot; n++) 
-    {
-        printf("\n");
-        print_task(tm->heap[n]);
-        printf("\n");
-    }
 }
 
 /* tm_is_empty: is the task manager empty?
@@ -222,8 +222,8 @@ task_t *tm_remove_most_urgent_task(task_manager_t *tm)
     }
 
     task_t* most_urgent_task = tm->heap[0];
-    tm->heap[0] = tm->heap[tm->next_heap_slot - 1]; // Add last value in heap to root
-    tm->next_heap_slot--; // Decrement number of elements in heap
+    tm->heap[0] = tm->heap[tm->next_heap_slot - 1];
+    tm->next_heap_slot--;
 
     sift_down(tm);
 

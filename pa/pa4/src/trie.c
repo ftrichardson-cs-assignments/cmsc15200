@@ -157,12 +157,12 @@ int num_completions(tnode_t *trie, char *prefix)
     return prefix_trie->count;
 }
 
-/* Fills array (helper to get_completions)
+/* Fills array with completions (helper to get_completions)
  * 
  * trie: a pointer to the trie
- * temp_string: array to hold strings
- * completions: array to hold completions
- * index_ptr: index for completions
+ * temp_string: array to store strings
+ * completions: array to store completions
+ * index_ptr: a pointer to the index for completions array
  */
 void completions_array(tnode_t* trie, char *temp_string, int str_index, char **completions, int *index_ptr) 
 {

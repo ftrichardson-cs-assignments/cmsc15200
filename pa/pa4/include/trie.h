@@ -59,3 +59,4 @@ int num_completions(tnode_t *trie, char *prefix);
  * Returns: an array of completion strings
  */ 
 char **get_completions(tnode_t *trie, char *prefix);
+

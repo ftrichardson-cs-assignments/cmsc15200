@@ -19,28 +19,17 @@ int main()
     tm_add_task(tm, t2);
     tm_add_task(tm, t3);
 
+    printf("\n");
     printf("After adding\n");
+    printf("\n");
     tm_print(tm);
 
-    printf("removing...\n");
-    while (!tm_is_empty(tm)) {
-        print_task(tm_remove_most_urgent_task(tm));
-    }
-
-    printf("add and remove\n");
-    tm_add_task(tm, t0);
-    tm_add_task(tm, t1);
-    tm_remove_most_urgent_task(tm);
-    tm_add_task(tm, t2);
+    printf("\n");
+    printf("Removing...\n");
+    task_t* most_urgent_task = tm_remove_most_urgent_task(tm);
+    printf("\n");
+    print_task(most_urgent_task);
+    printf("\n");
     tm_print(tm);
-
-    printf("After removing\n");
-    tm_print(tm);
-
-    // cleanup
-    // tasks t0 and t2 are in the heap and will be freed in the call to
-    // tm_free.
-    tm_free(tm);
-    free(t1);
-    free(t3);
+    printf("\n");
 }

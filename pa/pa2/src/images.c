@@ -109,30 +109,30 @@ ppm_t *create_greyscale(ppm_t *input)
  */
 void blur_pixel(ppm_t *input, ppm_t *blur, int size, int pixel[])
 {
-    int sum_red_pixels = 0, sum_green_pixels = 0, sum_blue_pixels = 0;
-	int num_pixels = 0;
-      
-    for (int k = pixel[0] - (((size + 1) / 2) - 1); k < pixel[0] + (((size + 1) / 2) - 1) + 1; k++)
+  int sum_red_pixels = 0, sum_green_pixels = 0, sum_blue_pixels = 0;
+  int num_pixels = 0;
+  
+  for (int k = pixel[0] - (((size + 1) / 2) - 1); k < pixel[0] + (((size + 1) / 2) - 1) + 1; k++)
+  {
+    for (int l = pixel[1] - (((size + 1) / 2) - 1); l < pixel[1] + (((size + 1) / 2) - 1) + 1; l++)
     {
-        for (int l = pixel[1] - (((size + 1) / 2) - 1); l < pixel[1] + (((size + 1) / 2) - 1) + 1; l++)
+      /* This handles edge cases along rows */
+      if (k >= 0 && k < blur->height) 
+      {
+        /* This handles edge cases along columns */
+        if (l >= 0 && l < blur->width) 
         {
-			/* This handles edge cases along rows */
-          	if (k >= 0 && k < blur->height) 
-          	{
-				/* This handles edge cases along columns */
-            	if (l >= 0 && l < blur->width) 
-            	{
-              		sum_red_pixels += input->image[k][l].red;
-              		sum_green_pixels += input->image[k][l].green;
-              		sum_blue_pixels += input->image[k][l].blue;
-              		num_pixels++;
-            	}
-          	}
+          sum_red_pixels += input->image[k][l].red;
+          sum_green_pixels += input->image[k][l].green;
+          sum_blue_pixels += input->image[k][l].blue;
+          num_pixels++;
         }
+      }
     }
-    blur->image[pixel[0]][pixel[1]].red = sum_red_pixels/num_pixels;
-    blur->image[pixel[0]][pixel[1]].green = sum_green_pixels/num_pixels;
-    blur->image[pixel[0]][pixel[1]].blue = sum_blue_pixels/num_pixels;
+  }
+  blur->image[pixel[0]][pixel[1]].red = sum_red_pixels/num_pixels;
+  blur->image[pixel[0]][pixel[1]].green = sum_green_pixels/num_pixels;
+  blur->image[pixel[0]][pixel[1]].blue = sum_blue_pixels/num_pixels;
 }
 
 /* blur: create new blurred ppm 

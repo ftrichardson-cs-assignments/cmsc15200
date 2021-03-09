@@ -13,7 +13,7 @@
  */
 bool flip_coin()
 {
-     return (rand() % 2 == 1);
+    return (rand() % 2 == 1);
 }
 
 
@@ -27,22 +27,22 @@ bool flip_coin()
  */
 double flip_only(double initial_amount, int num_bets)
 {
-     printf("\n");
-     for (int b = 1; b <= num_bets; b++) {
-         bool toss = flip_coin();
-         printf("%d, %s\n", b, (toss ? "WIN" : "LOSS"));
-     }
-     return initial_amount;
+    printf("\n");
+    for (int b = 1; b <= num_bets; b++) {
+        bool toss = flip_coin();
+        printf("%d, %s\n", b, (toss ? "WIN" : "LOSS"));
+    }
+    return initial_amount;
 }
 
-/* betting_strategy_to_str - convert enumerated type value 
+/* betting_strategy_to_str - convert enumerated type value
  * to a string
  *
  * strategy -- the betting strategy to convert to a string
  *
  * Returns: string
  */
-  
+
 char *betting_strategy_to_str(enum betting_strategies strategy)
 {
     // This task could also be done with a switch statement.

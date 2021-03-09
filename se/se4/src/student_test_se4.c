@@ -67,9 +67,11 @@ void print_image(bool **image, int len)
 
 int main()
 {
-    bool** smiley_face = make_smiley_face(); // smiley_face is 10 x 10
-    
-    /** Add calls to your functions here **/
+    int num_quarters = 0;
+    int total = find_amount_of_denomination(117, 25, &num_quarters);
+    printf("q: %d, t: %d\n", num_quarters, total); // q: 4, t: 100
 
-    print_image(smiley_face, 10);
+    struct coins c = make_change(117);
+    printf("q: %d, d: %d, n: %d, p: %d\n",
+        c.quarters, c.dimes, c.nickels, c.pennies); // q: 4, d: 1, n: 1, p: 2
 }

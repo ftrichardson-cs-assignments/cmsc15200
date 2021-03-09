@@ -25,6 +25,4 @@ int main()
     ht.table[3] = NULL;
 
     printf("is_full(ht): %d\n", is_full(ht));
-
-    /** Add calls to your functions here **/
 }

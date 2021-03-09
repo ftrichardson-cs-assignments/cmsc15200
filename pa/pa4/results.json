@@ -1,0 +1,224 @@
+{
+  "id": "Criterion v2.3.3",
+  "passed": 34,
+  "failed": 0,
+  "errored": 0,
+  "skipped": 0,
+  "test_suites": [
+    {
+      "name": "num_completions",
+      "passed": 10,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "tests": [
+        {
+          "name": "testJ",
+          "assertions": 1,
+          "status": "PASSED"
+        },
+        {
+          "name": "testI",
+          "assertions": 1,
+          "status": "PASSED"
+        },
+        {
+          "name": "testH",
+          "assertions": 1,
+          "status": "PASSED"
+        },
+        {
+          "name": "testG",
+          "assertions": 1,
+          "status": "PASSED"
+        },
+        {
+          "name": "testF",
+          "assertions": 1,
+          "status": "PASSED"
+        },
+        {
+          "name": "testE",
+          "assertions": 1,
+          "status": "PASSED"
+        },
+        {
+          "name": "testD",
+          "assertions": 1,
+          "status": "PASSED"
+        },
+        {
+          "name": "testC",
+          "assertions": 1,
+          "status": "PASSED"
+        },
+        {
+          "name": "testB",
+          "assertions": 1,
+          "status": "PASSED"
+        },
+        {
+          "name": "testA",
+          "assertions": 1,
+          "status": "PASSED"
+        }
+      ]
+    },
+    {
+      "name": "is_a_word",
+      "passed": 11,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "tests": [
+        {
+          "name": "testK",
+          "assertions": 1,
+          "status": "PASSED"
+        },
+        {
+          "name": "testJ",
+          "assertions": 1,
+          "status": "PASSED"
+        },
+        {
+          "name": "testI",
+          "assertions": 1,
+          "status": "PASSED"
+        },
+        {
+          "name": "testH",
+          "assertions": 1,
+          "status": "PASSED"
+        },
+        {
+          "name": "testG",
+          "assertions": 1,
+          "status": "PASSED"
+        },
+        {
+          "name": "testF",
+          "assertions": 1,
+          "status": "PASSED"
+        },
+        {
+          "name": "testE",
+          "assertions": 1,
+          "status": "PASSED"
+        },
+        {
+          "name": "testD",
+          "assertions": 1,
+          "status": "PASSED"
+        },
+        {
+          "name": "testC",
+          "assertions": 1,
+          "status": "PASSED"
+        },
+        {
+          "name": "testB",
+          "assertions": 1,
+          "status": "PASSED"
+        },
+        {
+          "name": "testA",
+          "assertions": 1,
+          "status": "PASSED"
+        }
+      ]
+    },
+    {
+      "name": "get_completions",
+      "passed": 9,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "tests": [
+        {
+          "name": "testI",
+          "assertions": 1,
+          "status": "PASSED"
+        },
+        {
+          "name": "testH",
+          "assertions": 1,
+          "status": "PASSED"
+        },
+        {
+          "name": "testG",
+          "assertions": 3,
+          "status": "PASSED"
+        },
+        {
+          "name": "testF",
+          "assertions": 3,
+          "status": "PASSED"
+        },
+        {
+          "name": "testE",
+          "assertions": 2,
+          "status": "PASSED"
+        },
+        {
+          "name": "testD",
+          "assertions": 1,
+          "status": "PASSED"
+        },
+        {
+          "name": "testC",
+          "assertions": 1,
+          "status": "PASSED"
+        },
+        {
+          "name": "testB",
+          "assertions": 1,
+          "status": "PASSED"
+        },
+        {
+          "name": "testA",
+          "assertions": 1,
+          "status": "PASSED"
+        }
+      ]
+    },
+    {
+      "name": "create_trie_node",
+      "passed": 1,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "tests": [
+        {
+          "name": "testA",
+          "assertions": 28,
+          "status": "PASSED"
+        }
+      ]
+    },
+    {
+      "name": "add_word",
+      "passed": 3,
+      "failed": 0,
+      "errored": 0,
+      "skipped": 0,
+      "tests": [
+        {
+          "name": "testC",
+          "assertions": 18,
+          "status": "PASSED"
+        },
+        {
+          "name": "testB",
+          "assertions": 9,
+          "status": "PASSED"
+        },
+        {
+          "name": "testA",
+          "assertions": 12,
+          "status": "PASSED"
+        }
+      ]
+    }
+  ]
+}
