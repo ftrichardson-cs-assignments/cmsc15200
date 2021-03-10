@@ -29,7 +29,26 @@ inttree_t* make_tree_node(int val, inttree_t* left, inttree_t* right)
 
 void print_tree(inttree_t *t) 
 {
+    if (t == NULL) 
+    {
+        printf("---<NULL>---\n");
+        return;
+    } 
+    
+    if (t->val == 1) 
+    {
+        printf("TREE:\n");
+        printf("-------------\n");
+    } else 
+    {
+        printf("subtree %d\n", t->val);
+        printf("-------------\n");
+    }
     printf("val: %d\n", t->val);
+    printf("\n");
+    print_tree(t->left);
+    print_tree(t->right);
+
 }
 
 /* path_adds_to: find whether a tree has a path of nodes from
@@ -62,21 +81,22 @@ bool path_adds_to(inttree_t *t, int num)
  */ 
 int preorder(inttree_t *t, int num)
 {
-    printf("%d\n", num);
-    while (t->val != num) 
+    // Base case
+    if (t == NULL) 
     {
-        if (num > t->val) 
-        {
-            print_tree(t);
-            t = t->right;
-        }
-
-        if (num < t->val) 
-        {
-            print_tree(t);
-            t = t->left;
-        }
+        return 0;
     }
+    
+    // Base case
+    if (t->val == num)
+    {   
+        return 0;
+    }
+
+    // Recursive case
+    int steps = 1 + preorder(t->left, num) + preorder(t->right, num);
+    
+    return steps;
 }
 
 /* inorder: search for a value in a tree using
@@ -102,6 +122,8 @@ int inorder(inttree_t *t, int num)
  */ 
 bool is_not_bst(inttree_t *t)
 {
-    // YOUR CODE HERE
-    return false;
+    if (t->val) 
+    {
+        return false;
+    }
 }
