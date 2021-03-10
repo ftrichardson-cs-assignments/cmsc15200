@@ -27,31 +27,7 @@ inttree_t* make_tree_node(int val, inttree_t* left, inttree_t* right)
     return t; 
 }
 
-void print_tree(inttree_t *t) 
-{
-    if (t == NULL) 
-    {
-        printf("---<NULL>---\n");
-        return;
-    } 
-    
-    if (t->val == 1) 
-    {
-        printf("TREE:\n");
-        printf("-------------\n");
-    } else 
-    {
-        printf("subtree %d\n", t->val);
-        printf("-------------\n");
-    }
-    printf("val: %d\n", t->val);
-    printf("\n");
-    print_tree(t->left);
-    print_tree(t->right);
-
-}
-
-/* path_adds_to: find whether a tree has a path of nodes from
+ /* path_adds_to: find whether a tree has a path of nodes from
  *     root to leaf whose values adds to num
  * 
  * t: a pointer to the tree
@@ -71,6 +47,37 @@ bool path_adds_to(inttree_t *t, int num)
     return path_adds_to(t->right, path_sum) || path_adds_to(t->left, path_sum);
 }
 
+/* preorder_h: helper function for preorder()
+ * 
+ * t: a pointer to the tree
+ * num: the value to find
+ * found: boolean indicating if num found in tree
+ * 
+ * Returns: the number of steps to find num
+ */
+int preorder_h(inttree_t* t, int num, bool *found) 
+{
+    if (t == NULL) 
+    {
+        return 0;
+    }
+
+    if (t->val == num) 
+    {
+        *found = true;
+        return 1;
+    }
+
+    int left = preorder_h(t->left, num, found);
+    if (*found)
+    {
+        return left + 1;
+    }
+
+    int right = preorder_h(t->right, num, found);
+    return left + right + 1;
+}
+
 /* preorder: search for a value in a tree using
  *     preorder traversal 
  * 
@@ -81,22 +88,41 @@ bool path_adds_to(inttree_t *t, int num)
  */ 
 int preorder(inttree_t *t, int num)
 {
-    // Base case
+    bool found;
+
+    int steps = preorder_h(t, num, &found);
+    return steps;
+}
+
+/* inorder_h: helper function for inorder()
+ *
+ * t: a pointer to the tree
+ * num: the value to find
+ * found: boolean indicating if num found in tree
+ *
+ * Returns: the number of steps to find num
+ */
+int inorder_h(inttree_t *t, int num, bool *found) 
+{
     if (t == NULL) 
     {
         return 0;
-    }
-    
-    // Base case
-    if (t->val == num)
-    {   
-        return 0;
+    } 
+
+    int left = inorder_h(t->left, num, found);
+    if (*found) 
+    {
+        return left;
     }
 
-    // Recursive case
-    int steps = 1 + preorder(t->left, num) + preorder(t->right, num);
-    
-    return steps;
+    if (t->val == num) 
+    {
+        *found = true;
+        return left + 1;
+    }
+
+    int right = inorder_h(t->right, num, found);
+    return left + right + 1;
 }
 
 /* inorder: search for a value in a tree using
@@ -109,8 +135,43 @@ int preorder(inttree_t *t, int num)
  */ 
 int inorder(inttree_t *t, int num)
 {
-    // YOUR CODE HERE
-    return 0;
+    bool found;
+    int steps = inorder_h(t, num, &found);
+    return steps;
+}
+
+/* minValue: find minimum value in binary search tree
+ *
+ * t: a pointer to the tree
+ *
+ * Returns: minimum value in tree
+ */
+int minValue(inttree_t *t) 
+{
+    inttree_t* curr = t;
+
+    while (curr->left != NULL) 
+    {
+        curr = curr->left;
+    }
+    return curr->val;
+}
+
+/* maxValue: find maximum value in binary search tree
+ *
+ * t: a pointer to the tree
+ *
+ * Returns: maximum value in tree
+ */
+int maxValue(inttree_t *t) 
+{
+    inttree_t* curr = t;
+
+    while (curr->right != NULL) 
+    {
+        curr = curr->right;
+    }
+    return curr->val;
 }
 
 /* is_not_bst: find whether a tree is not a 
@@ -120,10 +181,18 @@ int inorder(inttree_t *t, int num)
  * 
  * Returns: true if t is not a BST, false otherwise
  */ 
-bool is_not_bst(inttree_t *t)
+bool is_not_bst(inttree_t *t) 
 {
-    if (t->val) 
+    if (t == NULL) 
     {
         return false;
     }
+
+    if ((t->left != NULL && maxValue(t->left) > t->val) || 
+        (t->right != NULL && minValue(t->right) < t->val)) 
+    {
+        return true;
+    }
+
+    return is_not_bst(t->left) || is_not_bst(t->right);
 }
