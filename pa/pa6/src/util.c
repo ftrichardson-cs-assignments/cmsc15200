@@ -214,7 +214,7 @@ bool queue_is_empty(queue_t *q)
  * new_priority: new priority of num
  * 
  */ 
-void queue_change_priority(queue_t *q, int num, int new_priority)
+void queue_change_priority(queue_t *q, int num, double new_priority)
 {
     assert(q != NULL);
     qelement_t *prev;

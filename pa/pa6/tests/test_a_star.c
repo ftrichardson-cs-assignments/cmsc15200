@@ -401,6 +401,7 @@ Test(a_star, testE)
                  "      node_create(g, 0, 'A', 1, 0);\n"
                  "      node_create(g, 1, 'B', 0, 0);\n"
                  "      node_create(g, 2, 'C', 0, 1);\n"
+                 "      node_create(g, 3, 'D', 1, -1);\n"
                  "      add_edge(g, 0, 1);\n"
                  "      add_edge(g, 1, 2);\n"
                  "      add_edge(g, 0, 2);\n"
