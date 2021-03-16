@@ -3,14 +3,14 @@ Grading report for Flynn Richardson (frichardson)
 Programming Assignments
 =======================
 
-|  Programming Assignments  |     Score      | Late? |
-|---------------------------|----------------|-------|
-| Programming Assignment #1 |          95.81 |       |
-| Programming Assignment #2 |            100 |       |
-| Programming Assignment #3 |             87 |       |
-| Programming Assignment #4 |             96 |       |
-| Programming Assignment #5 |            100 |       |
-| Programming Assignment #6 | Not graded yet |       |
+|  Programming Assignments  |     Score      |       Late?       |
+|---------------------------|----------------|-------------------|
+| Programming Assignment #1 |          95.81 |                   |
+| Programming Assignment #2 |            100 |                   |
+| Programming Assignment #3 |             87 |                   |
+| Programming Assignment #4 |             96 | Late 48 + Late 24 |
+| Programming Assignment #5 | Not graded yet |                   |
+| Programming Assignment #6 | Not graded yet |                   |
 Short Exercises
 ===============
 
@@ -26,10 +26,10 @@ Short Exercises
 Timed Assessments
 =================
 
-|  Timed Assessments  | Score |
-|---------------------|------:|
-| Timed Assessment #1 |    81 |
-| Timed Assessment #2 |    64 |
+|  Timed Assessments  |     Score      |
+|---------------------|----------------|
+| Timed Assessment #1 |             81 |
+| Timed Assessment #2 | Not graded yet |
 
 
 
@@ -40,16 +40,16 @@ Total
 ---
 
 **NOTE**: There is still ungraded work, which means the maximum
-number of possible points is currently 90.00
+number of possible points is currently 65.00
 
 ---
 
 |                         | Points Obtained | Points Possible (so far) | Maximum Points |
 |-------------------------|----------------:|-------------------------:|---------------:|
-| Programming Assignments |           47.88 |                       50 |             60 |
+| Programming Assignments |           37.88 |                       40 |             60 |
 | Short Exercises         |           10.00 |                       10 |             10 |
-| Timed Assessments       |           21.75 |                       30 |             30 |
-| **TOTAL**               |           79.63 |                       90 |            100 |
+| Timed Assessments       |           12.15 |                       15 |             30 |
+| **TOTAL**               |           60.03 |                       65 |            100 |
 
-Your total score (out of 100) is 88.48
+Your total score (out of 100) is 92.36
 
