@@ -8,13 +8,9 @@ Programming Assignments
 | Programming Assignment #1 |          95.81 |       |
 | Programming Assignment #2 |            100 |       |
 | Programming Assignment #3 |             87 |       |
-| Programming Assignment #4 |             96 | Late+ |
-| Programming Assignment #5 | Not graded yet |       |
+| Programming Assignment #4 |             96 |       |
+| Programming Assignment #5 |            100 |       |
 | Programming Assignment #6 | Not graded yet |       |
-
-You have 1 late submissions left
-
-
 Short Exercises
 ===============
 
@@ -30,10 +26,10 @@ Short Exercises
 Timed Assessments
 =================
 
-|  Timed Assessments  |     Score      |
-|---------------------|----------------|
-| Timed Assessment #1 |             81 |
-| Timed Assessment #2 | Not graded yet |
+|  Timed Assessments  | Score |
+|---------------------|------:|
+| Timed Assessment #1 |    81 |
+| Timed Assessment #2 |    64 |
 
 
 
@@ -44,16 +40,16 @@ Total
 ---
 
 **NOTE**: There is still ungraded work, which means the maximum
-number of possible points is currently 65.00
+number of possible points is currently 90.00
 
 ---
 
 |                         | Points Obtained | Points Possible (so far) | Maximum Points |
 |-------------------------|----------------:|-------------------------:|---------------:|
-| Programming Assignments |           37.88 |                       40 |             60 |
+| Programming Assignments |           47.88 |                       50 |             60 |
 | Short Exercises         |           10.00 |                       10 |             10 |
-| Timed Assessments       |           12.15 |                       15 |             30 |
-| **TOTAL**               |           60.03 |                       65 |            100 |
+| Timed Assessments       |           21.75 |                       30 |             30 |
+| **TOTAL**               |           79.63 |                       90 |            100 |
 
-Your total score (out of 100) is 92.36
+Your total score (out of 100) is 88.48
 
