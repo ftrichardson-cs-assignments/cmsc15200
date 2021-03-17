@@ -81,7 +81,7 @@ void node_create(graph_t *graph, int node_num, char *city_name,
  */ 
 void add_edge_h(graph_t *graph, int node_num, int data) 
 {
-    intlist_t* new_neighbor = (intlist_t*)malloc(sizeof(intlist_t*));
+    intlist_t* new_neighbor = (intlist_t*)malloc(sizeof(intlist_t));
     if (new_neighbor == NULL)
     {
         fprintf(stderr, "add_edge_h: malloc failure\n");
@@ -106,6 +106,7 @@ void add_edge_h(graph_t *graph, int node_num, int data)
     }
 
     neighbor->next = new_neighbor;
+    return;
 }
 
 /* add_edge: add an edge between two nodes
@@ -179,5 +180,7 @@ double euclidean_distance(graph_t *graph, int node_num_1, int node_num_2)
  */ 
 double a_star(graph_t *graph, int start_node_num, int end_node_num)
 {
-    return 0;
+    // Priority queue
+
+    // Closed set
 }
