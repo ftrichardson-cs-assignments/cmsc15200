@@ -7,9 +7,6 @@
 #include "util.h"
 #include "a_star.h"
 
-// For A* SEARCH
-enum path_costs {H_COST, G_COST};
-
 /********* GRAPH *********/
 
 /* graph_create: create a graph
@@ -163,7 +160,7 @@ void graph_free(graph_t *graph)
 
 /********* A* SEARCH *********/
 
-/* euclidean_distance: calculates euclidean distance
+/* euclidean_distance: calculates euclidean distance between two nodes
  * 
  * graph: the graph
  * node_num1: the first node
@@ -181,32 +178,33 @@ double euclidean_distance(graph_t *graph, int node_num1, int node_num2)
     return sqrt(pow(latitude1 - latitude2, 2.0) + pow(longitude1 - longitude2, 2.0));
 }
 
+/* calculate_g_cost: calculates g_cost
+ *
+ * graph: the graph
+ * start_node_num: the starting node number
+ * node_num: node number
+ *
+ * Returns: g_cost value
+ */
+double calculate_g_cost(graph_t* graph, int parent_num, int node_num) 
+{
+    double parent_to_node_cost = euclidean_distance(graph, parent_num, node_num);
+
+    return graph->nodes[parent_num]->g_cost + parent_to_node_cost;
+}
+
 /* set parent: sets parent field of node
  *
  * graph: the graph
- * node_num_parent: the parent's node number
- * node_num_child: the child's node number
+ * node_num_parent: the parent node number
+ * node_num_child: the child node number
  */
 void set_parent(graph_t *graph, int node_num_parent, int node_num_child) 
 {
     graph->nodes[node_num_child]->parent = graph->nodes[node_num_parent];
 }
 
-
-double g_cost_calculate(graph_t* graph, int start_node_num, int node_num) 
-{
-    if (node_num == start_node_num) 
-    {
-        return 0;
-    }
-
-    int parent = graph->nodes[node_num]->parent->node_num;
-    double parent_to_node_cost = euclidean_distance(graph, start_node_num, node_num);
-
-    return graph->nodes[node_num]->g_cost + parent_to_node_cost;
-}
-
-/* set_path_costs: sets the h_cost, g_cost and f_costs for node 
+/* set_path_costs: sets h_cost, g_cost and f_cost of node
  * 
  * graph: the graph
  * node_num: node for which to set path costs 
@@ -237,8 +235,8 @@ double a_star(graph_t *graph, int start_node_num, int end_node_num)
 
     // Set start node path costs
     double h_cost = euclidean_distance(graph, start_node_num, end_node_num);
-    double g_cost = g_cost_calculate(graph, start_node_num, start_node_num);
-    double f_cost = h_cost + g_cost;
+    double g_cost = 0;
+    double f_cost = g_cost + h_cost;
     set_path_costs(graph, start_node_num, h_cost, g_cost, f_cost);
 
     // Add to open set
@@ -247,11 +245,9 @@ double a_star(graph_t *graph, int start_node_num, int end_node_num)
     // Open set
     while (!queue_is_empty(open_set))
     {
-        queue_print(open_set);
         int current_node = queue_remove(open_set);
-        queue_print(open_set);
 
-        // Break if current_node
+        // Break if current_node is end node
         if (current_node == end_node_num) 
         {
             break;
@@ -264,36 +260,44 @@ double a_star(graph_t *graph, int start_node_num, int end_node_num)
             int node_num = current_neighbor->num;
 
             // Check if parent field NULL
-            if (graph->nodes[node_num]->parent == NULL) 
+            if (graph->nodes[node_num]->parent == NULL)
             {
                 set_parent(graph, current_node, node_num);
             }
 
             double h_cost = euclidean_distance(graph, node_num, end_node_num);
-            double g_cost = g_cost_calculate(graph, start_node_num, node_num);
+            double g_cost = calculate_g_cost(graph, current_node, node_num);
             double f_cost = h_cost + g_cost;
 
-            if (set_query(closed_set, node_num) || (queue_query(open_set, node_num)
-                && graph->nodes[node_num]->f_cost < f_cost)) 
+            if (set_query(closed_set, node_num) || (queue_query(open_set, 
+                node_num) && graph->nodes[node_num]->f_cost < f_cost))
             {
                 current_neighbor = current_neighbor->next;
                 continue;
-
-            } else
-            {
-                set_path_costs(graph, node_num, h_cost, g_cost, f_cost);
-                set_parent(graph, current_node, node_num);
-                queue_add(open_set, node_num, f_cost);
-                queue_print(open_set);
-
-                current_neighbor = current_neighbor->next;
             }
+            
+            set_path_costs(graph, node_num, h_cost, g_cost, f_cost);
+            set_parent(graph, current_node, node_num);
+ 
+            if (queue_query(open_set, node_num)) 
+            {
+                queue_change_priority(open_set, node_num, f_cost);
+
+            } else 
+            {
+                queue_add(open_set, node_num, f_cost);
+            }
+
+            current_neighbor = current_neighbor->next;
         }
         set_add(closed_set, current_node);
-        set_print(closed_set);
     }
 
-    if (graph->nodes[end_node_num]->f_cost == 0) 
+    queue_free(open_set);
+    set_free(closed_set);
+
+    // No path
+    if (graph->nodes[end_node_num]->f_cost == 0)
     {
         return -1;
     }
