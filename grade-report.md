@@ -3,14 +3,14 @@ Grading report for Flynn Richardson (frichardson)
 Programming Assignments
 =======================
 
-|  Programming Assignments  |     Score      |       Late?       |
-|---------------------------|----------------|-------------------|
-| Programming Assignment #1 |          95.81 |                   |
-| Programming Assignment #2 |            100 |                   |
-| Programming Assignment #3 |             87 |                   |
-| Programming Assignment #4 |             96 | Late 48 + Late 24 |
-| Programming Assignment #5 |            100 | Late 48           |
-| Programming Assignment #6 | Not graded yet |                   |
+|  Programming Assignments  | Score  |       Late?       |
+|---------------------------|-------:|-------------------|
+| Programming Assignment #1 |  95.81 |                   |
+| Programming Assignment #2 | 100.00 |                   |
+| Programming Assignment #3 |  87.00 |                   |
+| Programming Assignment #4 |  96.00 | Late 48 + Late 24 |
+| Programming Assignment #5 | 100.00 | Late 48           |
+| Programming Assignment #6 | 100.00 | Late (waived)     |
 Short Exercises
 ===============
 
@@ -36,20 +36,14 @@ Timed Assessments
 
 Total
 =====
-
----
-
-**NOTE**: There is still ungraded work, which means the maximum
-number of possible points is currently 90.00
-
----
-
 |                         | Points Obtained | Points Possible (so far) | Maximum Points |
 |-------------------------|----------------:|-------------------------:|---------------:|
-| Programming Assignments |           47.88 |                       50 |             60 |
+| Programming Assignments |           57.88 |                       60 |             60 |
 | Short Exercises         |           10.00 |                       10 |             10 |
 | Timed Assessments       |           21.75 |                       30 |             30 |
-| **TOTAL**               |           79.63 |                       90 |            100 |
+| **TOTAL**               |           89.63 |                      100 |            100 |
 
-Your total score (out of 100) is 88.48
+Your total score (out of 100) is 89.63
+
+Your grade: B+
 
