@@ -181,7 +181,7 @@ double euclidean_distance(graph_t *graph, int node_num1, int node_num2)
 /* calculate_g_cost: calculates g_cost
  *
  * graph: the graph
- * start_node_num: the starting node number
+ * parent_num: the parent node number
  * node_num: node number
  *
  * Returns: g_cost value
@@ -297,7 +297,7 @@ double a_star(graph_t *graph, int start_node_num, int end_node_num)
     set_free(closed_set);
 
     // No path
-    if (graph->nodes[end_node_num]->f_cost == 0)
+    if (!graph->nodes[end_node_num]->f_cost && start_node_num != end_node_num)
     {
         return -1;
     }
