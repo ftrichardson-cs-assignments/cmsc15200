@@ -21,12 +21,10 @@ ppm_t *new_ppm(int height, int width)
     black_ppm->width = width;
     black_ppm->image = (struct color**)malloc(height * sizeof(struct color*));
 
-    for (int i = 0; i < height; i++)
-    {
+    for (int i = 0; i < height; i++) {
         black_ppm->image[i] = (struct color*)malloc(width * sizeof(struct color));
 
-        for (int j = 0; j < width; j++)
-        {
+        for (int j = 0; j < width; j++) {
 			/* Every value is zero for each pixel in black PPM */
             black_ppm->image[i][j].red = 0;
             black_ppm->image[i][j].green = 0;
@@ -42,8 +40,7 @@ ppm_t *new_ppm(int height, int width)
  */
 void free_ppm(ppm_t *input)
 {
-    for (int i = 0; i < input->height; i++) 
-    {
+    for (int i = 0; i < input->height; i++) {
         free(input->image[i]);
     }
     free(input->image);
@@ -60,10 +57,8 @@ ppm_t *create_negative(ppm_t *input)
 {
     ppm_t* negative = new_ppm(input->height, input->width);
     
-    for (int i = 0; i < negative->height; i++) 
-    {
-        for (int j = 0; j < negative->width; j++)
-        {
+    for (int i = 0; i < negative->height; i++) {
+        for (int j = 0; j < negative->width; j++) {
             negative->image[i][j].red = MAX_INTENSITY - input->image[i][j].red;
             negative->image[i][j].green = MAX_INTENSITY - input->image[i][j].green;
             negative->image[i][j].blue = MAX_INTENSITY - input->image[i][j].blue;
@@ -82,10 +77,8 @@ ppm_t *create_greyscale(ppm_t *input)
 {
     ppm_t* greyscale = new_ppm(input->height, input->width);
     
-    for (int i = 0; i < greyscale->height; i++)
-    {
-        for (int j = 0; j < greyscale->width; j++)
-        {
+    for (int i = 0; i < greyscale->height; i++) {
+        for (int j = 0; j < greyscale->width; j++) {
             int avg_RGB = ((77 * input->image[i][j].red) + 
                           (150 * input->image[i][j].green) + 
                           (29 * input->image[i][j].blue))/256;
@@ -109,30 +102,29 @@ ppm_t *create_greyscale(ppm_t *input)
  */
 void blur_pixel(ppm_t *input, ppm_t *blur, int size, int pixel[])
 {
-  int sum_red_pixels = 0, sum_green_pixels = 0, sum_blue_pixels = 0;
-  int num_pixels = 0;
+    int sum_red_pixels = 0;
+    int sum_green_pixels = 0;
+    int sum_blue_pixels = 0;
+
+    int num_pixels = 0;
   
-  for (int k = pixel[0] - (((size + 1) / 2) - 1); k < pixel[0] + (((size + 1) / 2) - 1) + 1; k++)
-  {
-    for (int l = pixel[1] - (((size + 1) / 2) - 1); l < pixel[1] + (((size + 1) / 2) - 1) + 1; l++)
-    {
-      /* This handles edge cases along rows */
-      if (k >= 0 && k < blur->height) 
-      {
-        /* This handles edge cases along columns */
-        if (l >= 0 && l < blur->width) 
-        {
-          sum_red_pixels += input->image[k][l].red;
-          sum_green_pixels += input->image[k][l].green;
-          sum_blue_pixels += input->image[k][l].blue;
-          num_pixels++;
+    for (int k = pixel[0] - (((size + 1) / 2) - 1); k < pixel[0] + (((size + 1) / 2) - 1) + 1; k++) {
+        for (int l = pixel[1] - (((size + 1) / 2) - 1); l < pixel[1] + (((size + 1) / 2) - 1) + 1; l++) {
+        /* This handles edge cases along rows */
+            if (k >= 0 && k < blur->height) {
+                /* This handles edge cases along columns */
+                if (l >= 0 && l < blur->width) {
+                    sum_red_pixels += input->image[k][l].red;
+                    sum_green_pixels += input->image[k][l].green;
+                    sum_blue_pixels += input->image[k][l].blue;
+                    num_pixels++;
+                }
+            }
         }
-      }
     }
-  }
-  blur->image[pixel[0]][pixel[1]].red = sum_red_pixels/num_pixels;
-  blur->image[pixel[0]][pixel[1]].green = sum_green_pixels/num_pixels;
-  blur->image[pixel[0]][pixel[1]].blue = sum_blue_pixels/num_pixels;
+    blur->image[pixel[0]][pixel[1]].red = sum_red_pixels/num_pixels;
+    blur->image[pixel[0]][pixel[1]].green = sum_green_pixels/num_pixels;
+    blur->image[pixel[0]][pixel[1]].blue = sum_blue_pixels/num_pixels;
 }
 
 /* blur: create new blurred ppm 
@@ -146,10 +138,8 @@ ppm_t *blur(ppm_t *input, int size)
 {
   	ppm_t* blur = new_ppm(input->height, input->width);
   
-  	for (int i = 0; i < blur->height; i++)
-  	{
-    	for (int j = 0; j < blur->width; j++) 
-    	{
+  	for (int i = 0; i < blur->height; i++) {
+    	for (int j = 0; j < blur->width; j++) {
             int pixel[] = {i, j};
       		blur_pixel(input, blur, size, pixel);
     	}
