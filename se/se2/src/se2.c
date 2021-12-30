@@ -35,27 +35,16 @@ double compute_payoff_amount(double initial, double payment, int days_since_loan
     assert(payment > 0);
     assert(payment_interval > 0);
 
-    double payoff_amount;
-    
-    if (days_since_loan_started <= 0 || days_since_loan_started < payment_interval) 
-    {
+    if (days_since_loan_started <= 0) {
         return initial;
-
-    } else 
-    {
-        payoff_amount = initial - ((days_since_loan_started / payment_interval) * payment);
-
-        if (payoff_amount <= 0) 
-        {
-            return 0;
-
-        } else 
-        {
-            return payoff_amount;
-        }
     }
+    
+    if (initial - ((days_since_loan_started / payment_interval) * payment) < 0) {
+        return 0;
+    }
+
+    return initial - ((days_since_loan_started / payment_interval) * payment);
 }
-  
 /*
  * Exercise 2
  * compute_leonardo - the Leonardo numbers are a sequence of numbers given by the recurrence:
@@ -70,23 +59,31 @@ double compute_payoff_amount(double initial, double payment, int days_since_loan
  */
 int compute_leonardo(int n)
 {
-    int i, x = 1, y = 1, z;
+    
+    // Represents the beginning Leonardo numbers
+    int x = 1;
+    int y = 1;
 
-    if (n == 0 || n == 1) 
-    {
+    int z; // Will hold value of the n-th Leonardo number
+
+    if (n == 0 || n == 1) {
         return 1;
-
-    } else 
-    {
-        for (i = 2; i <= n; i++) 
-        {
-            z = x + y + 1;
-            x = y;
-            y = z;
-        }
-        return y;
     }
+    
+    for (int i = 2; i <= n; i++) {
+        z = x + y + 1;
+
+        if (i == n) { // By this point, we have our n-th Leonardo number
+            break;
+        }
+
+        x = y;
+        y = z;
+    }
+
+    return z;
 }
+
 /*
  * Exercise 3 -- computes the square root of S using the Bakhshali
  * method (as described in the writeup)
@@ -106,14 +103,14 @@ double bakhshali_iterative(double S, double guess)
 {
     assert(S > 0);
 
-    double r, A;
+    double a, b;
 
-    while (fabs((S - (guess * guess))) >= EPSILON) 
-    {
-        r = (S - (guess * guess)) / (2 * guess);
-        A = r + guess;
-        guess = A - ((r * r) / (2 * A));
+    while (!(fabs((guess * guess) - S) < EPSILON)) {
+        a = (S - (guess * guess)) / (2 * guess);
+        b = guess + a;
+        guess = b - ((a * a) / (2 * b));
     }
+
     return guess;
 }
 
@@ -136,17 +133,15 @@ double bakhshali_recursive(double S, double guess)
 {
     assert(S > 0);
 
-    double r, A;
+    double a, b;
 
-    if (fabs((S - (guess * guess))) < EPSILON) 
-    {
+    if (fabs((guess * guess) - S) < EPSILON) {
         return guess;
-
-    } else 
-    {
-        r = (S - (guess * guess)) / (2 * guess);
-        A = r + guess;
-        guess = A - ((r * r) / (2 * A));
-        return bakhshali_recursive(S, guess);
     }
+
+    a = (S - (guess * guess)) / (2 * guess);
+    b = guess + a;
+    guess = b - ((a * a) / (2 * b));
+
+    return bakhshali_recursive(S, guess);
 }
