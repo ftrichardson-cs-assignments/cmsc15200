@@ -14,7 +14,7 @@
  */
 double vec_length(double x, double y, double z)
 {
-    return sqrt((x * x) + (y * y) + (z * z));
+    return sqrt(pow(x, 2) + pow(y, 2) + pow(z, 2));
 }
 
 /*
@@ -67,9 +67,10 @@ bool is_congruent_mod_n(int a, int b, int n)
 bool is_out_of_range(double x, double lb, double ub, bool endpoints_in_range)
 {
     if (endpoints_in_range) {
-        return (x < lb) || (x > ub);
+        return x < lb || x > ub;    
     }
-    return (x <= lb) || (x >= ub);
+
+    return x <= lb || x >= ub;
 }
 
 /* 
@@ -84,17 +85,47 @@ bool is_out_of_range(double x, double lb, double ub, bool endpoints_in_range)
  */
 double clip(double x, double lb, double ub)
 {
-    if ((x > lb) && (x < ub)) {
-        return x;
+    if (x < lb) {
+        return lb;
     }
-    else {
-        if (x <= lb) {
-            return lb;
-        }
-        else {
-            return ub;
-        }
+
+    if (x > ub) {
+        return ub;
     }
+
+    return x;
 }
 
 
+
+
+
+
+//  NOTES (Lectures 1 - 5)
+
+/*  Format of makefile (at command line, write 'make executable'):
+
+    (executable): (dependencies)
+        clang -g -Wall -02 (dependencies with a '.c' extension) -o executable
+
+    -Wall: enable all compiler warnings
+    -g: debugger
+    -o: rename executable from a.out */
+
+/*  By default, C uses **call by value** to pass arguments
+
+    For example...
+
+    int a = 1
+
+    void incr(int x) 
+    {
+        x = x + 1;
+        return x;
+    }
+
+    what incr(a) is really doing is incr(1), and so while the 
+    result of incr(a) is 2, a is still 1 because the actual reference to
+    the variable a was not passed */
+
+/*  Switch statements: do not forget breaks or default statement! */
