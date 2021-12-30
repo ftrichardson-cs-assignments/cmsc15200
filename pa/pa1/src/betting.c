@@ -8,7 +8,7 @@
 #include "util.h"
 #include "betting.h"
 
-/* bet_one_dollar_or_double: computes remaining cash from betting $1 each
+/* bet_one_or_double: computes remaining cash from betting $1 each
  * round, doubling bets after each successful coin flip, or doubling bets
  * bets after every unsuccessful coin flip (depending on the specified strategy)
  *
@@ -18,7 +18,7 @@
  *
  * Returns: amount of cash remaining as a double
  */
-double bet_one_dollar_or_double(double init_amount, int num_bets, enum betting_strategies strategy) 
+double bet_one_or_double(double init_amount, int num_bets, enum betting_strategies strategy) 
 {
     double bet_amount = 1.0;
     
@@ -54,7 +54,7 @@ double bet_one_dollar_or_double(double init_amount, int num_bets, enum betting_s
 
                 bet_amount *= 2;
             }
-        } else { // Bet one dollar each round model
+        } else { // Bet one dollar each round
             if (coin_flip_result) {
 
                 init_amount += bet_amount;
@@ -84,7 +84,7 @@ double bet_fibonacci(double init_amount, int num_bets)
 {
     double bet_amount = 1.0;
 
-    int x = 0, y = 1; // Fibonacci number trackers
+    int x = 0, y = 1; // Fibonacci trackers
 
     for (int i = 0; i < num_bets; i++) {
         if (bet_amount > init_amount) {
@@ -95,7 +95,6 @@ double bet_fibonacci(double init_amount, int num_bets)
         if (coin_flip_result) {
             init_amount += bet_amount;
 
-            // Resetting Fibonacci sequence
             x = 0;
             y = 1;
             bet_amount = 1.0;
@@ -185,7 +184,7 @@ double simulate_game(enum betting_strategies strategy, double init_amount,
     } else if (strategy == SERIES_STRATEGY) {
         final_amount = bet_series(init_amount, num_bets);
     } else {
-        final_amount = bet_one_dollar_or_double(init_amount, num_bets, strategy);
+        final_amount = bet_one_or_double(init_amount, num_bets, strategy);
     }
 
     return final_amount;
