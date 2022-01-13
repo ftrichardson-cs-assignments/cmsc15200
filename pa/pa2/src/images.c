@@ -100,7 +100,7 @@ ppm_t *create_greyscale(ppm_t *input)
  * pixel: array representing location of individual pixel
  *
  */
-void blur_pixel(ppm_t *input, ppm_t *blur, int size, int pixel[])
+void blur_pixel(ppm_t *input, ppm_t *blurred_ppm, int size, int pixel[])
 {
     int sum_red_pixels = 0;
     int sum_green_pixels = 0;
@@ -111,9 +111,9 @@ void blur_pixel(ppm_t *input, ppm_t *blur, int size, int pixel[])
     for (int k = pixel[0] - (((size + 1) / 2) - 1); k < pixel[0] + (((size + 1) / 2) - 1) + 1; k++) {
         for (int l = pixel[1] - (((size + 1) / 2) - 1); l < pixel[1] + (((size + 1) / 2) - 1) + 1; l++) {
         /* This handles edge cases along rows */
-            if (k >= 0 && k < blur->height) {
+            if (k >= 0 && k < blurred_ppm->height) {
                 /* This handles edge cases along columns */
-                if (l >= 0 && l < blur->width) {
+                if (l >= 0 && l < blurred_ppm->width) {
                     sum_red_pixels += input->image[k][l].red;
                     sum_green_pixels += input->image[k][l].green;
                     sum_blue_pixels += input->image[k][l].blue;
@@ -122,9 +122,9 @@ void blur_pixel(ppm_t *input, ppm_t *blur, int size, int pixel[])
             }
         }
     }
-    blur->image[pixel[0]][pixel[1]].red = sum_red_pixels/num_pixels;
-    blur->image[pixel[0]][pixel[1]].green = sum_green_pixels/num_pixels;
-    blur->image[pixel[0]][pixel[1]].blue = sum_blue_pixels/num_pixels;
+    blurred_ppm->image[pixel[0]][pixel[1]].red = sum_red_pixels/num_pixels;
+    blurred_ppm->image[pixel[0]][pixel[1]].green = sum_green_pixels/num_pixels;
+    blurred_ppm->image[pixel[0]][pixel[1]].blue = sum_blue_pixels/num_pixels;
 }
 
 /* blur: create new blurred ppm 
@@ -136,13 +136,13 @@ void blur_pixel(ppm_t *input, ppm_t *blur, int size, int pixel[])
 */
 ppm_t *blur(ppm_t *input, int size)
 {
-  	ppm_t* blur = new_ppm(input->height, input->width);
+  	ppm_t* blurred_ppm = new_ppm(input->height, input->width);
   
-  	for (int i = 0; i < blur->height; i++) {
-    	for (int j = 0; j < blur->width; j++) {
+  	for (int i = 0; i < blurred_ppm->height; i++) {
+    	for (int j = 0; j < blurred_ppm->width; j++) {
             int pixel[] = {i, j};
-      		blur_pixel(input, blur, size, pixel);
+      		blur_pixel(input, blurred_ppm, size, pixel);
     	}
   	}
-  	return blur;
+  	return blurred_ppm;
 }
