@@ -1,1 +1,2 @@
-Upstream repository for CMSC 15200, Winter 2021.
+Introduction to Computer Science II is the second course in a three-course sequence (CMSC 15100-15200-15400) designed for students who intend to take more advanced courses in computer science. This course introduces imperative programming using the C programming language. Topics include program design, control and data abstraction, pointers and memory management, and data structures including lists, trees, and graphs.
+https://www.classes.cs.uchicago.edu/archive/2021/spring/15200-1/syllabus.html
